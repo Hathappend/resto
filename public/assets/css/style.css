@@ -1,0 +1,37 @@
+#make-order .menu-category, .total-ordered{
+    opacity:0.8;
+    font-size: 0.7rem;
+}
+
+#make-order .menu-title, .price-label{
+    font-size: 0.9rem;
+}
+
+#menu .menu-category, .total-ordered{
+    opacity:0.8;
+    font-size: 0.7rem;
+}
+
+#menu .menu-title, .price-label{
+    font-size: 0.9rem;
+}
+
+table td, table th {
+    white-space: normal; /* Allows text to wrap */
+    word-wrap: break-word; /* Ensures long words will break */
+    vertical-align: middle;
+}
+
+#chef .estimate{
+    opacity:0.8;
+    font-size: 0.6rem;
+}
+
+i{
+    margin: 0;
+    padding: 0;
+}
+
+.btn:focus {
+    box-shadow: none;
+}

@@ -1,0 +1,20 @@
+{
+    "name": "project/pak-resto",
+    "autoload": {
+        "psr-4": {
+            "Project\\PakResto\\": "app/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Hathappend",
+            "email": "asepy183@gmail.com"
+        }
+    ],
+    "require": {
+        "ramsey/uuid": "^4.7",
+        "delight-im/auth": "^8.3",
+      "ext-pdo": "*",
+        "respect/validation": "^2.3"
+    }
+}

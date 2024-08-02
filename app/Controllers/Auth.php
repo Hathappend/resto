@@ -12,8 +12,6 @@ function show(): void{
 
 function login(): void{
 
-//    session_start();
-
     if (getCsrf()->validate('my-form')) {
 
         try {
@@ -38,9 +36,6 @@ function login(): void{
 
                 header('Location: /kasir');
             }
-
-
-
         }
         catch (\Delight\Auth\InvalidEmailException $e) {
             die('Wrong email address');
@@ -60,7 +55,16 @@ function login(): void{
         }
 
     }else{
-        echo "<script>window.location.href = '/koki'</script>";
+        echo "invalid login";
     }
+}
 
+/**
+ * @throws \Delight\Auth\AuthError
+ */
+function logout(): void {
+    getAuth()->logOut();
+    getAuth()->destroySession();
+
+    header('Location: /login');
 }

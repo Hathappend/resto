@@ -9,6 +9,7 @@ require __DIR__ . '/../app/Middlewares/checkAccessRole.php';
 //auth router
 add('GET', '/login', 'Auth', 'show', []);
 add('POST', '/login', 'Auth', 'login', []);
+add('GET', '/logout', 'Auth', 'logout', []);
 
 // Manager Router
 add('GET', '/manager', 'Manager', 'home', ['checkAccessRole']);

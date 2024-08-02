@@ -2,11 +2,11 @@
 <!--wrapper-->
 <div class="wrapper">
     <!--sidebar wrapper -->
-    <?php require __DIR__ . '/includes/sidebar.php'?>
+    <?php require __DIR__ . '/../includes/sidebar.php'?>
     <!--end sidebar wrapper -->
 
     <!--start header -->
-    <?php require __DIR__ . '/includes/navbar.php'?>
+    <?php require __DIR__ . '/../includes/navbar.php'?>
     <!--end header -->
 
     <!--start page wrapper -->

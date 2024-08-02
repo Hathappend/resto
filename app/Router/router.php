@@ -2,14 +2,14 @@
 
 $routes = [];
 
-function add($method, $path, $controller, $function, $middleware = []): void {
+function add($method, $path, $controller, $function, $middlewares = []): void {
     global $routes;
     $routes[] = [
         "method" => $method,
         "path" => $path,
         "controller" => $controller,
         "function" => $function,
-        "middleware" => $middleware
+        "middlewares" => $middlewares
     ];
 }
 
@@ -24,14 +24,14 @@ function run(): void
         $pattern = "#^" . $route['path'] . "$#";
         if (preg_match($pattern, $path, $variables) && $method == $route['method']) {
 
-//            foreach ($route['middleware'] as $middleware) {
-//                if (is_callable($middleware)) {
-//                    call_user_func($middleware);
-//                } else {
-//                    echo "Invalid middleware function.";
-//                    return;
-//                }
-//            }
+            foreach ($route['middlewares'] as $middleware) {
+                if (function_exists($middleware)) {
+                    call_user_func($middleware);
+                } else {
+                    echo "Invalid middleware function.";
+                    return;
+                }
+            }
 
             $controllerPath = __DIR__ . "/../Controllers/{$route['controller']}.php";
             if (file_exists($controllerPath)) {
@@ -52,5 +52,7 @@ function run(): void
             }
             return;
         }
+
+        http_response_code(404);
     }
 }

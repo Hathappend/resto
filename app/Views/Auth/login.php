@@ -1,3 +1,4 @@
+
 <!--wrapper-->
 <div class="wrapper">
     <div class="section-authentication-signin d-flex align-items-center justify-content-center">
@@ -14,15 +15,17 @@
                                     <hr/>
                                 </div>
                                 <div class="form-body">
-                                    <form class="row g-3" method="post">
+
+                                    <form class="row g-3" action="/login" method="post">
+                                        <?=getCsrf()->input('my-form');?>
                                         <div class="col-12">
                                             <label for="inputEmailAddress" class="form-label">Email Address</label>
-                                            <input type="email" class="form-control" id="inputEmailAddress" placeholder="Email Address">
+                                            <input type="email" class="form-control" name="email" id="inputEmailAddress" placeholder="Email Address">
                                         </div>
                                         <div class="col-12">
                                             <label for="inputChoosePassword" class="form-label">Enter Password</label>
                                             <div class="input-group" id="show_hide_password">
-                                                <input type="password" class="form-control border-end-0" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
+                                                <input type="password" class="form-control border-end-0" name="password" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
                                             </div>
                                         </div>
                                         <div class="col-md-6">

@@ -66,5 +66,6 @@ function logout(): void {
     getAuth()->logOut();
     getAuth()->destroySession();
 
+//    echo "<script>window.location.href = '/login'</script>"
     header('Location: /login');
 }

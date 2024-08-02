@@ -1,4 +1,4 @@
-
+<?php ob_start(); ?>
 <!--wrapper-->
 <div class="wrapper">
     <div class="section-authentication-signin d-flex align-items-center justify-content-center">

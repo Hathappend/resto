@@ -20,6 +20,8 @@ function run(): void
     $path = $_SERVER['REQUEST_URI'] ?? '/';
     $method = $_SERVER['REQUEST_METHOD'];
 
+    $path = parse_url($path, PHP_URL_PATH);
+
     foreach ($routes as $route) {
         $pattern = "#^" . $route['path'] . "$#";
         if (preg_match($pattern, $path, $variables) && $method == $route['method']) {

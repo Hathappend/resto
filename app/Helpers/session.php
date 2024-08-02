@@ -8,11 +8,15 @@ function flash($key, $value = null): void {
 
 function getFlash($key): ?string {
     $flashKey = 'flash_' . $key;
+
     if (isset($_SESSION[$flashKey])) {
-        $value = $_SESSION[$flashKey];
-        unset($_SESSION[$flashKey]);
-        return $value;
+        return $_SESSION[$flashKey];
     }
     return null;
+}
+
+function clearFlash($key): void {
+    $flashKey = 'flash_' . $key;
+    unset($_SESSION[$flashKey]);
 }
 

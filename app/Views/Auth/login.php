@@ -6,6 +6,22 @@
             <div class="row row-cols-1 row-cols-lg-2 row-cols-xl-3">
                 <div class="col mx-auto">
                     <div class="card mt-5 mt-lg-0">
+
+                        <?php if (getFlash('success')){ ?>
+                            <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-white">Success</h6>
+                                        <div class="text-white"><?= getFlash('success') ?></div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <?php clearFlash('success'); ?>
+                        <?php } ?>
+
                         <div class="card-body">
                             <div class="border p-4 rounded">
                                 <div class="text-center">
@@ -28,13 +44,13 @@
                                                 <input type="password" class="form-control border-end-0" name="password" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
-                                                <label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6 text-end">	<a href="authentication-forgot-password.html">Forgot Password ?</a>
+<!--                                        <div class="col-md-6">-->
+<!--                                            <div class="form-check form-switch">-->
+<!--                                                <input class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>-->
+<!--                                                <label class="form-check-label" for="flexSwitchCheckChecked">Remember Me</label>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <div class="col-md-12 text-end"><a href="/forgot-password">Forgot Password ?</a>
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">

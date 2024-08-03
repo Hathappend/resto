@@ -2,17 +2,20 @@
 
 require __DIR__ . '/../app/Router/router.php';
 require __DIR__ . '/../app/Middlewares/checkAccessRole.php';
+
 //require __DIR__ . '/../app/Middlewares/isLoggedInOrNot.php';
 
 
 
 //auth router
-add('GET', '/login', 'Auth', 'show', []);
-add('POST', '/login', 'Auth', 'login', []);
+add('GET', '/login', 'Auth', 'show', ['checkAccessRole']);
+add('POST', '/login', 'Auth', 'login', ['checkAccessRole']);
 add('GET', '/forgot-password', 'Auth', 'forgotPassword', []);
 add('POST', '/forgot-password', 'Auth', 'postForgotPassword', []);
 add('GET', '/reset-password', 'Auth', 'resetPassword', []);
 add('POST', '/reset-password', 'Auth', 'postResetPassword', []);
+add('GET', '/change-password', 'Auth', 'changePassword', ['checkAccessRole']);
+add('POST', '/change-password', 'Auth', 'postChangePassword', ['checkAccessRole']);
 add('GET', '/logout', 'Auth', 'logout', ['checkAccessRole']);
 
 // Manager Router
@@ -40,7 +43,8 @@ add('GET', '/tambah-menu', 'Chef', 'addNewMenu', ['checkAccessRole']);
 add('GET', '/edit-menu', 'Chef', 'editMenu', ['checkAccessRole']);
 add('GET', '/kategori-menu', 'Chef', 'category', ['checkAccessRole']);
 
-// Manager Router
+// Profile Router
 add('GET', '/profile', 'Profile', 'home', ['checkAccessRole']);
+add('POST', '/profile', 'Profile', 'profileUpdate', ['checkAccessRole']);
 
 run();

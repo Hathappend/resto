@@ -22,6 +22,21 @@
                             <?php clearFlash('success'); ?>
                         <?php } ?>
 
+                        <?php if (getFlash('error')){ ?>
+                            <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                                <div class="d-flex align-items-center">
+                                    <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                                    </div>
+                                    <div class="ms-3">
+                                        <h6 class="mb-0 text-white">Danger</h6>
+                                        <div class="text-white"><?= getFlash('error') ?></div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <?php clearFlash('error'); ?>
+                        <?php } ?>
+
                         <div class="card-body">
                             <div class="border p-4 rounded">
                                 <div class="text-center">
@@ -33,16 +48,27 @@
                                 <div class="form-body">
 
                                     <form class="row g-3" action="/login" method="post">
-                                        <?=getCsrf()->input('my-form');?>
-                                        <div class="col-12">
+                                        <?=getCsrf()->input('csrf_token');?>
+                                        <div class="col-12 ">
                                             <label for="inputEmailAddress" class="form-label">Email Address</label>
-                                            <input type="email" class="form-control" name="email" id="inputEmailAddress" placeholder="Email Address">
+                                            <input type="text" class="form-control <?= (getFlash('errors')['email'] ?? '') ? 'is-invalid' : '' ?> " name="email" id="inputEmailAddress" placeholder="Email Address">
+
+                                            <?php if (getFlash('errors')['email'] ?? '') { ?>
+                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['email'] ?? '' ?></div>
+                                            <?php } ?>
+
                                         </div>
                                         <div class="col-12">
                                             <label for="inputChoosePassword" class="form-label">Enter Password</label>
-                                            <div class="input-group" id="show_hide_password">
-                                                <input type="password" class="form-control border-end-0" name="password" id="inputChoosePassword" value="12345678" placeholder="Enter Password"> <a href="javascript:;" class="input-group-text bg-transparent"><i class='bx bx-hide'></i></a>
-                                            </div>
+
+                                                <input type="password" class="form-control <?= (getFlash('errors')['password'] ?? '') ? 'is-invalid' : '' ?>" name="password" id="inputChoosePassword" placeholder="Enter Password">
+
+                                                <?php if (getFlash('errors')) { ?>
+                                                    <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['password'] ?></div>
+                                                <?php } ?>
+                                                <?php clearFlash('errors'); ?>
+
+
                                         </div>
 <!--                                        <div class="col-md-6">-->
 <!--                                            <div class="form-check form-switch">-->

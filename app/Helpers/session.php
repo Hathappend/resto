@@ -6,7 +6,7 @@ function flash($key, $value = null): void {
     }
 }
 
-function getFlash($key): ?string {
+function getFlash($key): null|string|array {
     $flashKey = 'flash_' . $key;
 
     if (isset($_SESSION[$flashKey])) {

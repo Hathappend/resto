@@ -10,7 +10,6 @@ require __DIR__ . '/../app/Helpers/session.php';
 require __DIR__ . '/../app/Helpers/sendPasswordResetMail.php';
 require __DIR__ . '/../routes/web.php';
 
-
 //unset($_SESSION['previous_url']);
 if (getAuth()->isLoggedIn()) {
     //URL for redirect back

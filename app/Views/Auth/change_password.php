@@ -19,7 +19,7 @@
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                <?php clearFlash('success'); ?>
+                                    <?php clearFlash('success'); ?>
                                 <?php } ?>
 
                                 <?php if (getFlash('error')){ ?>
@@ -34,20 +34,27 @@
                                         </div>
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                <?php clearFlash('error'); ?>
+                                    <?php clearFlash('error'); ?>
                                 <?php } ?>
 
-                                <form action="/reset-password" method="POST">
+                                <form action="/change-password" method="POST">
                                     <?=getCsrf()->input('csrf_token');?>
-                                    <input type="hidden" name="selector" value="<?= $_GET['selector'] ?>">
-                                    <input type="hidden" name="token" value="<?= $_GET['token'] ?>">
                                     <div class="p-5">
                                         <div class="text-start">
                                             <img src="assets/images/logo-img.png" width="180" alt="">
                                         </div>
                                         <h4 class="mt-5 font-weight-bold">Generate New Password</h4>
-                                        <p class="text-muted">We received your reset password request. Please enter your new password!</p>
-                                        <div class="mb-3 mt-5">
+                                        <p class="text-muted">We received your change password request. Please enter your old and new password!</p>
+                                        <div class="mb-0 mt-5">
+                                            <label class="form-label">Old Password</label>
+                                            <input type="text" name="old_password" class="form-control <?= getFlash('errors')['old_password'] ? 'is-invalid' : '' ?>" placeholder="Enter new password" />
+
+                                            <?php if (getFlash('errors')['old_password'] ?? '') { ?>
+                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['old_password'] ?? '' ?></div>
+                                            <?php } ?>
+
+                                        </div>
+                                        <div class="mb-3 mt-3">
                                             <label class="form-label">New Password</label>
                                             <input type="text" name="password" class="form-control <?= getFlash('errors')['password'] ? 'is-invalid' : '' ?>" placeholder="Enter new password" />
 
@@ -59,7 +66,7 @@
 
                                         </div>
                                         <div class="d-grid gap-2">
-                                            <button type="submit" class="btn btn-primary">Reset Password</button>
+                                            <button type="submit" class="btn btn-primary">Change Password</button>
                                         </div>
                                     </div>
                                 </form>

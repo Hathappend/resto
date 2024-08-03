@@ -35,3 +35,8 @@ i{
 .btn:focus {
     box-shadow: none;
 }
+
+.invalid-message{
+    font-size: 0.8rem;
+    font-family: "Calibri Light";
+}

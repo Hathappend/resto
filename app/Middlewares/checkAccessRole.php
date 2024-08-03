@@ -20,6 +20,6 @@ function checkAccessRole(): void {
         }
     } else {
         header('Location: /login');
-        exit;
+        die();
     }
 }

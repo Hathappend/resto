@@ -44,7 +44,14 @@
                         <p class="text-muted">Enter your registered email ID to reset the password</p>
                         <div class="my-4">
                             <label class="form-label">Email id</label>
-                            <input type="email" name="email" class="form-control form-control-lg" placeholder="example@user.com" />
+                            <input type="text" name="email" class="form-control form-control-lg <?= (getFlash('errors')['email'] ?? '') ? 'is-invalid' : '' ?>" placeholder="example@user.com" />
+
+                            <?php if (getFlash('errors') ?? '') { ?>
+                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['email'] ?? '' ?></div>
+                            <?php } ?>
+
+                            <?php clearFlash('errors'); ?>
+
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">Send</button>

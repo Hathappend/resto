@@ -102,7 +102,7 @@ function postForgotPassword(): void{
             try {
                 getAuth()->forgotPassword($request['email'], function ($selector, $token) use ($request) {
                     $toEmail = $_POST['email'];
-                    sendPasswordResetEmail($toEmail, $selector, $token);
+                    sendEmail(toEmail: $toEmail, useFor: 'reset', selector: $selector, token: $token);
                 }, 3600);
 
                 header('Location: /forgot-password');

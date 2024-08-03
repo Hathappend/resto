@@ -23,7 +23,9 @@ add('GET', '/manager', 'Manager', 'home', ['checkAccessRole']);
 add('GET', '/info-pesanan', 'Manager', 'orderInfo', ['checkAccessRole']);
 add('GET', '/info-menu', 'Manager', 'menuInfo', ['checkAccessRole']);
 add('GET', '/info-transaksi', 'Manager', 'transactionInfo', ['checkAccessRole']);
-add('GET', '/managemen-karyawan', 'Manager', 'employeeManagement', ['checkAccessRole']);
+add('GET', '/managemen-karyawan', 'Manager', 'usersManagement', ['checkAccessRole']);
+add('POST', '/managemen-karyawan/add', 'Manager', 'addUsers', ['checkAccessRole']);
+add('POST', '/managemen-karyawan/edit', 'Manager', 'editUsers', ['checkAccessRole']);
 
 //Waiter Router
 add('GET', '/pelayan', 'Waiter', 'home', ['checkAccessRole']);

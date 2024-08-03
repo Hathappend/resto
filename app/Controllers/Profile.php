@@ -3,26 +3,15 @@
 require __DIR__ . "/../Helpers/view.php";
 require __DIR__ . "/../Helpers/file.php";
 require __DIR__ . "/../Helpers/image.php";
+require __DIR__ . "/../Helpers/role.php";
 require __DIR__ . "/../Models/User.php";
 require __DIR__ . '/../Request/userRequest.php';
 
 function home(): void
 {
-
-    $role = array_values(getAuth()->getRoles())[0];
-    if ($role == "REVIEWER") {
-        $role = "Pelayan";
-    }elseif ($role == "COORDINATOR"){
-        $role = "Koki";
-    }elseif ($role == "MODERATOR"){
-        $role = "Kasir";
-    }else{
-        $role = "Manager";
-    }
-
     view("Profile/index", [
         "title" => "Profile",
-        'role' => $role,
+        'role' => getRoleWhoSignin(),
         'fetchAll' => findById(getAuth()->id())
     ]);
 }

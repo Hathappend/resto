@@ -48,6 +48,10 @@ function userRequest(array $request): bool{
         $errors['old_password'] = "Password Lama Wajib Diisi";
     }
 
+    if (isset($request['roles_mask']) && !v::notEmpty()->validate($request['roles_mask'])) {
+        $errors['roles_mask'] = "Role Pekerjaan Wajib Diisi";
+    }
+
 
     if (!$errors ) {
         return true;

@@ -3,7 +3,7 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-function sendPasswordResetEmail($toEmail, $selector, $token): bool {
+function sendEmail(?string $toEmail, string $useFor, ?string $selector = null, ?string $token = null, ?array $data = []): bool {
     $mail = new PHPMailer(true);
 
     try {
@@ -20,11 +20,19 @@ function sendPasswordResetEmail($toEmail, $selector, $token): bool {
         $mail->setFrom('hathappend@gmail.com', 'Pak Resto');
         $mail->addAddress($toEmail);                               // Add a recipient
 
-        // Content
-        $mail->isHTML(true);                                      // Set email format to HTML
-        $mail->Subject = 'Password Reset Request';
-        $mail->Body    = 'Click <a href="http://pak-resto.test/reset-password?selector=' . urlencode($selector) . '&token=' . urlencode($token) . '">here</a> to reset your password.';
-        $mail->AltBody = 'Click the following link to reset your password: https://yourapp.com/reset-password?selector=' . urlencode($selector) . '&token=' . urlencode($token);
+        $mail->isHTML(true);
+        if ($useFor == 'reset') {
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    = 'Click <a href="http://pak-resto.test/reset-password?selector=' . urlencode($selector) . '&token=' . urlencode($token) . '">here</a> to reset your password.';
+            $mail->AltBody = 'Click the following link to reset your password: https://yourapp.com/reset-password?selector=' . urlencode($selector) . '&token=' . urlencode($token);
+        } elseif($useFor == 'info'){
+            $mail->Subject = 'Password Reset Request';
+            $mail->Body    =
+                "Kredensial Login : 
+                Email = {$data['email']}
+                password = {$data['password']}
+                ";
+        }
 
         $mail->send();
         return true;

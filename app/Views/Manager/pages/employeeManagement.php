@@ -41,6 +41,36 @@
             </div>
             <!--end breadcrumb-->
 
+            <?php if (getFlash('error')){ ?>
+                <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Danger</h6>
+                            <div class="text-white"><?= getFlash('error') ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('error'); ?>
+            <?php } ?>
+
+            <?php if (getFlash('success')){ ?>
+                <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Success</h6>
+                            <div class="text-white"><?= getFlash('success') ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('success'); ?>
+            <?php } ?>
+
             <div class="row" >
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                     <div class="row">
@@ -50,7 +80,7 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0">Total Karyawan</p>
-                                            <h5 class="mb-0">$52,945</h5>
+                                            <h5 class="mb-0"><?= count($users) ?></h5>
                                         </div>
                                         <div class="ms-auto">	<i class='bx bx-wallet font-30'></i>
                                         </div>
@@ -64,7 +94,7 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0">Pelayan</p>
-                                            <h5 class="mb-0">$52,945</h5>
+                                            <h5 class="mb-0"><?= getUserRoleCount(\Project\PakResto\Models\Role::WAITER)[0]['total'] ?></h5>
                                         </div>
                                         <div class="ms-auto">	<i class='bx bx-wallet font-30'></i>
                                         </div>
@@ -78,7 +108,7 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0">Kasir</p>
-                                            <h5 class="mb-0">$52,945</h5>
+                                            <h5 class="mb-0"><?= getUserRoleCount(\Project\PakResto\Models\Role::CASHIER)[0]['total'] ?></h5>
                                         </div>
                                         <div class="ms-auto">	<i class='bx bx-wallet font-30'></i>
                                         </div>
@@ -92,7 +122,7 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0">Koki</p>
-                                            <h5 class="mb-0">$52,945</h5>
+                                            <h5 class="mb-0"><?= getUserRoleCount(\Project\PakResto\Models\Role::CHEF)[0]['total'] ?></h5>
                                         </div>
                                         <div class="ms-auto">	<i class='bx bx-wallet font-30'></i>
                                         </div>
@@ -356,6 +386,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+
                         <div class="card-body">
                             <div class="row d-flex justify-content-between align-items-center">
                                 <div class="col-12 col-sm-5 col-md-5 col-lg-4 col-xl-4">
@@ -365,6 +396,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7">
                                     <div class="employee-action float-end">
                                         <div class="btn-group my-1" role="group" aria-label="Button group with nested dropdown">
@@ -379,14 +411,14 @@
                                                 </ul>
                                             </div>
                                         </div>
-                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEmployee">+ Karyawan</button>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUsers">+ Karyawan</button>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- Modal add new employee-->
-                            <div class="modal fade" id="addEmployee" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
+                            <div class="modal fade" id="addUsers" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
                                     <div class="modal-content">
                                         <div class="modal-body p-0 m-0">
                                             <div class="border-top border-0 border-4 border-primary">
@@ -397,54 +429,77 @@
                                                         <h5 class="mb-0 text-primary">Registrasi Karyawan</h5>
                                                     </div>
                                                     <hr>
-                                                    <form class="row g-3">
+                                                    <form action="/managemen-karyawan/add" method="POST" class="row g-3">
+                                                        <?=getCsrf()->input('csrf_token');?>
                                                         <div class="col-md-6">
-                                                            <label for="inputFirstName" class="form-label">First Name</label>
-                                                            <input type="email" class="form-control" id="inputFirstName">
+                                                            <label for="inputFirstName" class="form-label">Nama Depan</label>
+                                                            <input type="text" name="first_name" class="form-control <?= (getFlash('errors')['first_name'] ?? '') ? 'is-invalid' : '' ?>" id="inputFirstName" autofocus>
+                                                            <?php if (getFlash('errors')['first_name'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['first_name'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label for="inputLastName" class="form-label">Last Name</label>
-                                                            <input type="password" class="form-control" id="inputLastName">
+                                                            <label for="inputLastName" class="form-label">Nama Belakang (optional)</label>
+                                                            <input type="text" name="last_name" class="form-control <?= (getFlash('errors')['last_name'] ?? '') ? 'is-invalid' : '' ?>" id="inputLastName">
+                                                            <?php if (getFlash('errors')['last_name'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['last_name'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="inputEmail" class="form-label">Email</label>
-                                                            <input type="email" class="form-control" id="inputEmail">
+                                                            <input type="text" name="email" class="form-control <?= (getFlash('errors')['email'] ?? '') ? 'is-invalid' : '' ?>" id="inputEmail">
+                                                            <?php if (getFlash('errors')['email'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['email'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <label for="inputPassword" class="form-label">Password</label>
-                                                            <input type="password" class="form-control" id="inputPassword">
+                                                            <input type="text" name="password" class="form-control" id="inputPassword" value="<?= \Ramsey\Uuid\Uuid::uuid4()->toString() ?>" readonly>
                                                         </div>
                                                         <div class="col-12">
-                                                            <label for="inputAddress" class="form-label">Address</label>
-                                                            <textarea class="form-control" id="inputAddress" placeholder="Address..." rows="3"></textarea>
+                                                            <label for="inputAddress" class="form-label">Alamat</label>
+                                                            <textarea name="address" class="form-control <?= (getFlash('errors')['address'] ?? '') ? 'is-invalid' : '' ?>" id="inputAddress" placeholder="Address..." rows="3"></textarea>
+                                                            <?php if (getFlash('errors')['address'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['address'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-12">
-                                                            <label for="inputAddress2" class="form-label">Address 2</label>
-                                                            <textarea class="form-control" id="inputAddress2" placeholder="Address 2..." rows="3"></textarea>
+                                                            <label for="inputAddress2" class="form-label">Alamat 2 (optional)</label>
+                                                            <textarea class="form-control" name="address2" id="inputAddress2" placeholder="Address 2..." rows="3"></textarea>
                                                         </div>
                                                         <div class="col-md-6">
-                                                            <label for="inputCity" class="form-label">City</label>
-                                                            <input type="text" class="form-control" id="inputCity">
+                                                            <label for="inputCity" class="form-label">Kota</label>
+                                                            <input type="text" name="city" class="form-control <?= (getFlash('errors')['city'] ?? '') ? 'is-invalid' : '' ?>" id="inputCity">
+                                                            <?php if (getFlash('errors')['city'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['city'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-md-4">
-                                                            <label for="inputState" class="form-label">State</label>
-                                                            <select id="inputState" class="form-select">
-                                                                <option selected>Choose...</option>
-                                                                <option>...</option>
-                                                            </select>
+                                                            <label for="inputState" class="form-label">Provinsi</label>
+                                                            <input type="text" name="state" class="form-control <?= (getFlash('errors')['state'] ?? '') ? 'is-invalid' : '' ?>" id="inputState">
+                                                            <?php if (getFlash('errors')['state'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['state'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <label for="inputZip" class="form-label">Zip</label>
-                                                            <input type="text" class="form-control" id="inputZip">
+                                                            <label for="inputZip" class="form-label">Kode Pos</label>
+                                                            <input type="number" name="zip" class="form-control <?= (getFlash('errors')['zip'] ?? '') ? 'is-invalid' : '' ?>" id="inputZip">
+                                                            <?php if (getFlash('errors')['zip'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['zip'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-12">
-                                                            <label for="inputJob" class="form-label">Role Pekerjaan</label>
-                                                            <select id="inputJob" class="form-select" aria-label="Default select example">
-                                                                <option selected>Open this select menu</option>
-                                                                <option value="1">One</option>
-                                                                <option value="2">Two</option>
-                                                                <option value="3">Three</option>
+                                                            <label for="inputRolesMask" class="form-label">Role Pekerjaan</label>
+                                                            <select id="inputRolesMask" name="roles_mask" class="form-select <?= (getFlash('errors')['roles_mask'] ?? '') ? 'is-invalid' : '' ?>" aria-label="Default select example">
+                                                                <option value="" selected>Pilih Role Pekerjaan</option>
+                                                                <option value="<?= \Project\PakResto\Models\Role::MANAGER ?>">Manager</option>
+                                                                <option value="<?= \Project\PakResto\Models\Role::CASHIER ?>">Kasir</option>
+                                                                <option value="<?= \Project\PakResto\Models\Role::WAITER ?>">Pelayan</option>
+                                                                <option value="<?= \Project\PakResto\Models\Role::CHEF ?>">Koki</option>
                                                             </select>
+                                                            <?php if (getFlash('errors')['roles_mask'] ?? '') { ?>
+                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['roles_mask'] ?? '' ?></div>
+                                                            <?php } ?>
                                                         </div>
                                                         <div class="col-12">
                                                             <hr>
@@ -459,488 +514,157 @@
                                 </div>
                             </div>
 
+                            <?php if (getFlash('errors')) {?>
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        var myModalElement = document.getElementById('addUsers');
+                                        var addUsers = new bootstrap.Modal(myModalElement);
+                                        addUsers.show();
+                                    });
+                                </script>
+                            <?php } ?>
+
+                            <?php clearFlash('errors'); ?>
                             <hr/>
                             <div class="table-responsive">
                                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>Nama</th>
+                                        <th>Email</th>
+                                        <th>Alamat</th>
+                                        <th>Posisi</th>
+                                        <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tbody>
+
+                                    <?php foreach ($users as $user) { ?>
+
                                     <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
+                                        <td><?= $user['first_name'] .' '. $user['last_name'] ?? ''  ?></td>
+                                        <td><?= $user['email']  ?></td>
+                                        <td><?= $user['address'] .', '. ($user['address2'] ?? '') .', '. $user['city'] .', '. $user['province'] .', '. $user['zip']  ?></td>
+                                        <td><?= getRole($user['roles_mask'])  ?></td>
+                                        <td><?= $user['status'] ?? ''  ?></td>
                                         <td>
-                                            <button class="btn btn-outline-warning">Edit</button>
+                                            <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#edit<?= $user['id'] ?>">Edit</button>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td>Garrett Winters</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>63</td>
-                                        <td>2011/07/25</td>
-                                        <td>$170,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ashton Cox</td>
-                                        <td>Junior Technical Author</td>
-                                        <td>San Francisco</td>
-                                        <td>66</td>
-                                        <td>2009/01/12</td>
-                                        <td>$86,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cedric Kelly</td>
-                                        <td>Senior Javascript Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>22</td>
-                                        <td>2012/03/29</td>
-                                        <td>$433,060</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Brielle Williamson</td>
-                                        <td>Integration Specialist</td>
-                                        <td>New York</td>
-                                        <td>61</td>
-                                        <td>2012/12/02</td>
-                                        <td>$372,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Herrod Chandler</td>
-                                        <td>Sales Assistant</td>
-                                        <td>San Francisco</td>
-                                        <td>59</td>
-                                        <td>2012/08/06</td>
-                                        <td>$137,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Rhona Davidson</td>
-                                        <td>Integration Specialist</td>
-                                        <td>Tokyo</td>
-                                        <td>55</td>
-                                        <td>2010/10/14</td>
-                                        <td>$327,900</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Colleen Hurst</td>
-                                        <td>Javascript Developer</td>
-                                        <td>San Francisco</td>
-                                        <td>39</td>
-                                        <td>2009/09/15</td>
-                                        <td>$205,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sonya Frost</td>
-                                        <td>Software Engineer</td>
-                                        <td>Edinburgh</td>
-                                        <td>23</td>
-                                        <td>2008/12/13</td>
-                                        <td>$103,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jena Gaines</td>
-                                        <td>Office Manager</td>
-                                        <td>London</td>
-                                        <td>30</td>
-                                        <td>2008/12/19</td>
-                                        <td>$90,560</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Quinn Flynn</td>
-                                        <td>Support Lead</td>
-                                        <td>Edinburgh</td>
-                                        <td>22</td>
-                                        <td>2013/03/03</td>
-                                        <td>$342,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Charde Marshall</td>
-                                        <td>Regional Director</td>
-                                        <td>San Francisco</td>
-                                        <td>36</td>
-                                        <td>2008/10/16</td>
-                                        <td>$470,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Haley Kennedy</td>
-                                        <td>Senior Marketing Designer</td>
-                                        <td>London</td>
-                                        <td>43</td>
-                                        <td>2012/12/18</td>
-                                        <td>$313,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tatyana Fitzpatrick</td>
-                                        <td>Regional Director</td>
-                                        <td>London</td>
-                                        <td>19</td>
-                                        <td>2010/03/17</td>
-                                        <td>$385,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michael Silva</td>
-                                        <td>Marketing Designer</td>
-                                        <td>London</td>
-                                        <td>66</td>
-                                        <td>2012/11/27</td>
-                                        <td>$198,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Paul Byrd</td>
-                                        <td>Chief Financial Officer (CFO)</td>
-                                        <td>New York</td>
-                                        <td>64</td>
-                                        <td>2010/06/09</td>
-                                        <td>$725,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gloria Little</td>
-                                        <td>Systems Administrator</td>
-                                        <td>New York</td>
-                                        <td>59</td>
-                                        <td>2009/04/10</td>
-                                        <td>$237,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Bradley Greer</td>
-                                        <td>Software Engineer</td>
-                                        <td>London</td>
-                                        <td>41</td>
-                                        <td>2012/10/13</td>
-                                        <td>$132,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dai Rios</td>
-                                        <td>Personnel Lead</td>
-                                        <td>Edinburgh</td>
-                                        <td>35</td>
-                                        <td>2012/09/26</td>
-                                        <td>$217,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jenette Caldwell</td>
-                                        <td>Development Lead</td>
-                                        <td>New York</td>
-                                        <td>30</td>
-                                        <td>2011/09/03</td>
-                                        <td>$345,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Yuri Berry</td>
-                                        <td>Chief Marketing Officer (CMO)</td>
-                                        <td>New York</td>
-                                        <td>40</td>
-                                        <td>2009/06/25</td>
-                                        <td>$675,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Caesar Vance</td>
-                                        <td>Pre-Sales Support</td>
-                                        <td>New York</td>
-                                        <td>21</td>
-                                        <td>2011/12/12</td>
-                                        <td>$106,450</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Doris Wilder</td>
-                                        <td>Sales Assistant</td>
-                                        <td>Sydney</td>
-                                        <td>23</td>
-                                        <td>2010/09/20</td>
-                                        <td>$85,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Angelica Ramos</td>
-                                        <td>Chief Executive Officer (CEO)</td>
-                                        <td>London</td>
-                                        <td>47</td>
-                                        <td>2009/10/09</td>
-                                        <td>$1,200,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gavin Joyce</td>
-                                        <td>Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>42</td>
-                                        <td>2010/12/22</td>
-                                        <td>$92,575</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jennifer Chang</td>
-                                        <td>Regional Director</td>
-                                        <td>Singapore</td>
-                                        <td>28</td>
-                                        <td>2010/11/14</td>
-                                        <td>$357,650</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Brenden Wagner</td>
-                                        <td>Software Engineer</td>
-                                        <td>San Francisco</td>
-                                        <td>28</td>
-                                        <td>2011/06/07</td>
-                                        <td>$206,850</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fiona Green</td>
-                                        <td>Chief Operating Officer (COO)</td>
-                                        <td>San Francisco</td>
-                                        <td>48</td>
-                                        <td>2010/03/11</td>
-                                        <td>$850,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shou Itou</td>
-                                        <td>Regional Marketing</td>
-                                        <td>Tokyo</td>
-                                        <td>20</td>
-                                        <td>2011/08/14</td>
-                                        <td>$163,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michelle House</td>
-                                        <td>Integration Specialist</td>
-                                        <td>Sydney</td>
-                                        <td>37</td>
-                                        <td>2011/06/02</td>
-                                        <td>$95,400</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Suki Burks</td>
-                                        <td>Developer</td>
-                                        <td>London</td>
-                                        <td>53</td>
-                                        <td>2009/10/22</td>
-                                        <td>$114,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Prescott Bartlett</td>
-                                        <td>Technical Author</td>
-                                        <td>London</td>
-                                        <td>27</td>
-                                        <td>2011/05/07</td>
-                                        <td>$145,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gavin Cortez</td>
-                                        <td>Team Leader</td>
-                                        <td>San Francisco</td>
-                                        <td>22</td>
-                                        <td>2008/10/26</td>
-                                        <td>$235,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Martena Mccray</td>
-                                        <td>Post-Sales support</td>
-                                        <td>Edinburgh</td>
-                                        <td>46</td>
-                                        <td>2011/03/09</td>
-                                        <td>$324,050</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Unity Butler</td>
-                                        <td>Marketing Designer</td>
-                                        <td>San Francisco</td>
-                                        <td>47</td>
-                                        <td>2009/12/09</td>
-                                        <td>$85,675</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Howard Hatfield</td>
-                                        <td>Office Manager</td>
-                                        <td>San Francisco</td>
-                                        <td>51</td>
-                                        <td>2008/12/16</td>
-                                        <td>$164,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hope Fuentes</td>
-                                        <td>Secretary</td>
-                                        <td>San Francisco</td>
-                                        <td>41</td>
-                                        <td>2010/02/12</td>
-                                        <td>$109,850</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vivian Harrell</td>
-                                        <td>Financial Controller</td>
-                                        <td>San Francisco</td>
-                                        <td>62</td>
-                                        <td>2009/02/14</td>
-                                        <td>$452,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Timothy Mooney</td>
-                                        <td>Office Manager</td>
-                                        <td>London</td>
-                                        <td>37</td>
-                                        <td>2008/12/11</td>
-                                        <td>$136,200</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jackson Bradshaw</td>
-                                        <td>Director</td>
-                                        <td>New York</td>
-                                        <td>65</td>
-                                        <td>2008/09/26</td>
-                                        <td>$645,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Olivia Liang</td>
-                                        <td>Support Engineer</td>
-                                        <td>Singapore</td>
-                                        <td>64</td>
-                                        <td>2011/02/03</td>
-                                        <td>$234,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Bruno Nash</td>
-                                        <td>Software Engineer</td>
-                                        <td>London</td>
-                                        <td>38</td>
-                                        <td>2011/05/03</td>
-                                        <td>$163,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sakura Yamamoto</td>
-                                        <td>Support Engineer</td>
-                                        <td>Tokyo</td>
-                                        <td>37</td>
-                                        <td>2009/08/19</td>
-                                        <td>$139,575</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Thor Walton</td>
-                                        <td>Developer</td>
-                                        <td>New York</td>
-                                        <td>61</td>
-                                        <td>2013/08/11</td>
-                                        <td>$98,540</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Finn Camacho</td>
-                                        <td>Support Engineer</td>
-                                        <td>San Francisco</td>
-                                        <td>47</td>
-                                        <td>2009/07/07</td>
-                                        <td>$87,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Serge Baldwin</td>
-                                        <td>Data Coordinator</td>
-                                        <td>Singapore</td>
-                                        <td>64</td>
-                                        <td>2012/04/09</td>
-                                        <td>$138,575</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Zenaida Frank</td>
-                                        <td>Software Engineer</td>
-                                        <td>New York</td>
-                                        <td>63</td>
-                                        <td>2010/01/04</td>
-                                        <td>$125,250</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Zorita Serrano</td>
-                                        <td>Software Engineer</td>
-                                        <td>San Francisco</td>
-                                        <td>56</td>
-                                        <td>2012/06/01</td>
-                                        <td>$115,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jennifer Acosta</td>
-                                        <td>Junior Javascript Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>43</td>
-                                        <td>2013/02/01</td>
-                                        <td>$75,650</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cara Stevens</td>
-                                        <td>Sales Assistant</td>
-                                        <td>New York</td>
-                                        <td>46</td>
-                                        <td>2011/12/06</td>
-                                        <td>$145,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hermione Butler</td>
-                                        <td>Regional Director</td>
-                                        <td>London</td>
-                                        <td>47</td>
-                                        <td>2011/03/21</td>
-                                        <td>$356,250</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lael Greer</td>
-                                        <td>Systems Administrator</td>
-                                        <td>London</td>
-                                        <td>21</td>
-                                        <td>2009/02/27</td>
-                                        <td>$103,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jonas Alexander</td>
-                                        <td>Developer</td>
-                                        <td>San Francisco</td>
-                                        <td>30</td>
-                                        <td>2010/07/14</td>
-                                        <td>$86,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shad Decker</td>
-                                        <td>Regional Director</td>
-                                        <td>Edinburgh</td>
-                                        <td>51</td>
-                                        <td>2008/11/13</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michael Bruce</td>
-                                        <td>Javascript Developer</td>
-                                        <td>Singapore</td>
-                                        <td>29</td>
-                                        <td>2011/06/27</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donna Snider</td>
-                                        <td>Customer Support</td>
-                                        <td>New York</td>
-                                        <td>27</td>
-                                        <td>2011/01/25</td>
-                                        <td>$112,000</td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
+
+                                        <!-- Modal add new employee-->
+                                        <div class="modal fade" id="edit<?= $user['id']?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-body p-0 m-0">
+                                                        <div class="border-top border-0 border-4 border-primary">
+                                                            <div class="card-body p-5">
+                                                                <div class="card-title d-flex align-items-center">
+                                                                    <div><i class="bx bxs-user me-1 font-22 text-primary"></i>
+                                                                    </div>
+                                                                    <h5 class="mb-0 text-primary">Ubah Data Karyawan</h5>
+                                                                </div>
+                                                                <hr>
+                                                                <form action="/managemen-karyawan/edit" method="POST">
+                                                                    <?=getCsrf()->input('csrf_token');?>
+                                                                    <input type="hidden" name="id" value="<?=$user['id']?>">
+                                                                    <div class="row g-3">
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputFirstName" class="form-label">Nama Depan</label>
+                                                                            <input type="text" name="first_name" class="form-control <?= (getFlash('errors')['first_name'] ?? '') ? 'is-invalid' : '' ?>" id="inputFirstName" value="<?= $user['first_name']?>" autofocus>
+                                                                            <?php if (getFlash('errors')['first_name'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['first_name'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputLastName" class="form-label">Nama Belakang (optional)</label>
+                                                                            <input type="text" name="last_name" class="form-control <?= (getFlash('errors')['last_name'] ?? '') ? 'is-invalid' : '' ?>" value="<?=$user['last_name']?>" id="inputLastName">
+                                                                            <?php if (getFlash('errors')['last_name'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['last_name'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputEmail" class="form-label">Email</label>
+                                                                            <input type="text" name="email" class="form-control <?= (getFlash('errors')['email'] ?? '') ? 'is-invalid' : '' ?>" value="<?=$user['email']?>" id="inputEmail">
+                                                                            <?php if (getFlash('errors')['email'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['email'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputPassword" class="form-label">Password</label>
+                                                                            <input type="text" name="password" class="form-control" id="inputPassword" value="<?=$user['password']?>" readonly>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <label for="inputAddress" class="form-label">Alamat</label>
+                                                                            <textarea name="address" class="form-control <?= (getFlash('errors')['address'] ?? '') ? 'is-invalid' : '' ?>" id="inputAddress" placeholder="Address..." rows="3"><?=$user['address']?></textarea>
+                                                                            <?php if (getFlash('errors')['address'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['address'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <label for="inputAddress2" class="form-label">Alamat 2 (optional)</label>
+                                                                            <textarea class="form-control" name="address2" id="inputAddress2" placeholder="Address 2..." rows="3"><?=$user['address2']?></textarea>
+                                                                        </div>
+                                                                        <div class="col-md-6">
+                                                                            <label for="inputCity" class="form-label">Kota</label>
+                                                                            <input type="text" name="city" class="form-control <?= (getFlash('errors')['city'] ?? '') ? 'is-invalid' : '' ?>" value="<?=$user['city']?>" id="inputCity">
+                                                                            <?php if (getFlash('errors')['city'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['city'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-md-4">
+                                                                            <label for="inputState" class="form-label">Provinsi</label>
+                                                                            <input type="text" name="state" class="form-control <?= (getFlash('errors')['state'] ?? '') ? 'is-invalid' : '' ?>" value="<?=$user['province']?>" id="inputState">
+                                                                            <?php if (getFlash('errors')['state'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['state'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-md-2">
+                                                                            <label for="inputZip" class="form-label">Kode Pos</label>
+                                                                            <input type="number" name="zip" class="form-control <?= (getFlash('errors')['zip'] ?? '') ? 'is-invalid' : '' ?>" value="<?=$user['zip']?>" id="inputZip">
+                                                                            <?php if (getFlash('errors')['zip'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['zip'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <label for="inputRolesMask" class="form-label">Role Pekerjaan</label>
+                                                                            <select id="inputRolesMask" name="roles_mask" class="form-select <?= (getFlash('errors')['roles_mask'] ?? '') ? 'is-invalid' : '' ?>" aria-label="Default select example">
+                                                                                <option value="">Pilih Role Pekerjaan</option>
+                                                                                <option value="<?= \Project\PakResto\Models\Role::MANAGER ?>" <?= $user['roles_mask'] == \Project\PakResto\Models\Role::MANAGER ? 'selected' : '' ?>>Manager</option>
+                                                                                <option value="<?= \Project\PakResto\Models\Role::CASHIER ?>" <?= $user['roles_mask'] == \Project\PakResto\Models\Role::CASHIER ? 'selected' : '' ?>>Kasir</option>
+                                                                                <option value="<?= \Project\PakResto\Models\Role::WAITER ?>" <?= $user['roles_mask'] == \Project\PakResto\Models\Role::WAITER ? 'selected' : '' ?>>Pelayan</option>
+                                                                                <option value="<?= \Project\PakResto\Models\Role::CHEF ?>" <?= $user['roles_mask'] == \Project\PakResto\Models\Role::CHEF ? 'selected' : '' ?>>Koki</option>
+                                                                            </select>
+                                                                            <?php if (getFlash('errors')['roles_mask'] ?? '') { ?>
+                                                                                <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['roles_mask'] ?? '' ?></div>
+                                                                            <?php } ?>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <hr>
+                                                                            <button type="submit" class="btn btn-primary px-5">Simpan</button>
+                                                                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <?php if (getFlash('errors')) {?>
+                                            <script>
+                                                document.addEventListener('DOMContentLoaded', function() {
+                                                    var myModalElement = document.getElementById('editUsers');
+                                                    var addUsers = new bootstrap.Modal(myModalElement);
+                                                    addUsers.show();
+                                                });
+                                            </script>
+                                        <?php } ?>
+
+                                    <?php }  ?>
+
                                     </tfoot>
                                 </table>
                             </div>
@@ -1060,3 +784,4 @@
     </div>
 </div>
 <!--end switcher-->
+

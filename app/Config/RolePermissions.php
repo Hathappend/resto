@@ -4,6 +4,6 @@ return [
     'MANAGER' => ['/manager', '/info-pesanan', '/info-menu', '/info-transaksi', '/managemen-karyawan', '/profile', '/change-password', '/logout'],
     'REVIEWER' => ['/pelayan', '/pesanan', '/buat-pesanan', '/reservasi-meja', '/profile', '/change-password', '/logout'], //pelayan
     'MODERATOR' => ['/kasir', '/histori-transaksi', '/rekapitulasi', '/profile', '/change-password', '/logout'], //kasir
-    'COORDINATOR' => ['/koki', '/menu', '/tambah-menu', '/edit-menu', '/kategort-menu', '/profile', '/change-password', '/logout'], //koki
-    'PUBLIC' => ['/login'],
+    'COORDINATOR' => ['/koki', '/menu', '/tambah-menu', '/edit-menu', '/kategori-menu', '/profile', '/change-password', '/logout', '/kategori-menu/add', '/edit-menu/id/([0-9a-zA-Z-]*)'], //koki
+    'PUBLIC' => ['/login', '/streamTables'],
 ];

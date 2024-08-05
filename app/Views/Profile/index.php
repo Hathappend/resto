@@ -98,7 +98,10 @@
                                                             <div class="container p-3">
 
                                                                 <div class="mb-3">
-                                                                    <input id="image-uploadify" name="profile_img" type="file" accept="image/*" >
+                                                                    <input id="image" name="profile_img" class="form-control" type="file">
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <img class="w-100" id="showImage" src="<?= !empty($fetchAll[0]['profile_img']) ? "/uploads/profile/{$fetchAll[0]['profile_img']}" : "/assets/images/no-image-available.jpeg"  ?>" class="rounded img-thumbnail" alt="Card Image Cap">
                                                                 </div>
                                                                 <button type="submit" class="btn btn-outline-primary w-100 mt-3 ">Simpan</button>
 
@@ -409,4 +412,21 @@
 </div>
 <!--end switcher-->
 
+<script>
+    function showImageByUserInput(){
 
+        $(document).ready(function(){
+
+            $('#image').change(function(e){
+
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#showImage').attr('src', e.target.result);
+                    $('#showImage').show();
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            });
+        });
+    }
+    showImageByUserInput()
+</script>

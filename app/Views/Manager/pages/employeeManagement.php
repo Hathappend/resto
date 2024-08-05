@@ -657,8 +657,8 @@
                                             <script>
                                                 document.addEventListener('DOMContentLoaded', function() {
                                                     var myModalElement = document.getElementById('editUsers');
-                                                    var addUsers = new bootstrap.Modal(myModalElement);
-                                                    addUsers.show();
+                                                    var editUsers = new bootstrap.Modal(myModalElement);
+                                                    editUsers.show();
                                                 });
                                             </script>
                                         <?php } ?>

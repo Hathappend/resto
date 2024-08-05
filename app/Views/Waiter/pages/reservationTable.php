@@ -39,7 +39,7 @@
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-primary mb-3 mb-lg-0" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="btn btn-primary mb-3 mb-lg-0" data-bs-toggle="modal" data-bs-target="#addReservation">
                             <i class='bx bxs-plus-square'></i>Reservasi
                         </button>
 
@@ -47,138 +47,134 @@
                     <!--end breadcrumb-->
                 </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Buat Reservasi Baru</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <?php if (getFlash('success')){ ?>
+                    <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                        <div class="d-flex align-items-center">
+                            <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
                             </div>
-                            <div class="modal-body">
-                                <div class="container p-3">
-                                    <form>
-                                        <div class="row mb-3">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Nomor Meja</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-select bg-light" aria-label="Default select example">
-                                                    <option selected>Open this select menu</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Tanggal Reservasi</label>
-                                            <div class="col-sm-9">
-                                                <input type="date" class="form-control" id="inputPassword3" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Waktu Reservasi</label>
-                                            <div class="col-sm-9">
-                                                <input type="time" class="form-control" id="inputPassword3" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kapasitas</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" inputmode="numeric" class="form-control" id="inputPassword3" disabled>
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Jumlah Tamu</label>
-                                            <div class="col-sm-9">
-                                                <input type="text" inputmode="numeric" class="form-control bg-light" id="inputPassword3">
-                                            </div>
-                                        </div>
-                                        <div class="row mb-3">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Status</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-select bg-light" aria-label="Default select example">
-                                                    <option selected>Open this select menu</option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-outline-primary w-100 mt-3 ">Simpan</button>
-                                    </form>
-                                </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0 text-white">Success</h6>
+                                <div class="text-white"><?= getFlash('success') ?></div>
                             </div>
-
-
                         </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                </div>
+                    <?php clearFlash('success'); ?>
+                <?php } ?>
+
+                <?php if (getFlash('error')){ ?>
+                    <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                        <div class="d-flex align-items-center">
+                            <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0 text-white">Danger</h6>
+                                <div class="text-white"><?= getFlash('error');?></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php clearFlash('error'); ?>
+                <?php } ?>
+
 
                 <div class="row mt-4">
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body"> <i class="text-primary" data-feather="check-circle"></i>
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
+
+                    <?php foreach ($tables as $table) { ?>
+
+                        <div class="col-4 col-sm-3 col-md-2 col-lg-2">
+                            <button class="btn btn-transparent" data-bs-toggle="modal" data-bs-target="#addReservation<?=$table['table_number']?>">
+                                <div class="card text-center">
+                                    <div class="card-body">
+                                        <?= $table['status'] == "dipesan" ? "<i class='text-primary' data-feather='check-circle'></i>" : '' ?>
+                                        <p class="mb-0 mt-3">Meja <?=$table['table_number']?> </p>
+                                        <p class="mb-0">Kapasitas : <?=$table['capacity']?> </p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="addReservation<?=$table['table_number']?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Buat Reservasi Baru</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container p-3">
+                                        <form action="/reservasi-meja/add" method="POST">
+                                            <?=getCsrf()->input('csrf_token');?>
+<!--                                            <input type="hidden" name="table_number" value="--><?php //=$table['table_number']?><!--">-->
+                                            <div class="row mb-3">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label">Nomor Meja</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="table_number" class="form-control" id="inputPassword3" value="<?= $table['table_number'] ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="inputPassword3" class="col-sm-3 col-form-label">Tanggal Reservasi</label>
+                                                <div class="col-sm-9">
+                                                    <input type="date" class="form-control" id="inputPassword3" value="<?= date('Y-m-d') ?>" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="inputPassword3" class="col-sm-3 col-form-label">Waktu Reservasi</label>
+                                                <div class="col-sm-9">
+                                                    <input type="time" class="form-control" value="<?= date('H:i') ?>" id="inputPassword3" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="inputPassword3" class="col-sm-3 col-form-label">Kapasitas</label>
+                                                <div class="col-sm-9">
+                                                    <input type="text" name="capacity" inputmode="numeric" value="<?= $table['capacity'] ?>" class="form-control" id="capacity" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="inputPassword3" class="col-sm-3 col-form-label">Jumlah Tamu</label>
+                                                <div class="col-sm-9">
+                                                    <input type="number" name="pax" inputmode="numeric" class="form-control bg-light <?= (getFlash('errors')['pax'] ?? '') ? 'is-invalid' : '' ?>" value="<?=getStatusByTablenumber($table['table_number'])["status"] == 'dipesan' ? $table['pax'] : 0?>" id="inputPassword3">
+                                                    <?php if (getFlash('errors')['pax'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['pax'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <div class="row mb-3">
+                                                <label for="inputEmail3" class="col-sm-3 col-form-label">Status</label>
+                                                <div class="col-sm-9">
+                                                    <select class="form-select bg-light <?= (getFlash('errors')['status'] ?? '') ? 'is-invalid' : '' ?>" name="status" aria-label="Default select example">
+                                                        <option value="" selected>Open this select menu</option>
+                                                        <option value="dipesan" <?=getStatusByTablenumber($table['table_number'])["status"] == "dipesan" ? 'selected' : ''?>>dipesan</option>
+                                                        <option value="tersedia" <?=getStatusByTablenumber($table['table_number'])["status"] == "tersedia" ? 'selected' : ''?>>tersedia</option>
+                                                    </select>
+                                                    <?php if (getFlash('errors')['status'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['status'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                            <button type="submit" class="btn btn-outline-primary w-100 mt-3 ">Simpan</button>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body"> <i class="text-primary" data-feather="check-circle"></i>
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body"> <i class="text-primary" data-feather="check-circle"></i>
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body"> <i class="text-primary" data-feather="check-circle"></i>
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4 col-sm-3 col-md-2 col-lg-2">
-                        <div class="card text-center">
-                            <div class="card-body">
-                                <p class="mb-0 mt-3">Meja 01 </p>
-                                <p class="mb-0">Kapasitas : 4 </p>
-                            </div>
-                        </div>
-                    </div>
+
+                    <?php if (getFlash('errors')) {?>
+                        <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var myModalElement = document.getElementById('addReservation<?=getFlash('table_number')?>');
+                            var addReservation = new bootstrap.Modal(myModalElement);
+                            addReservation.show();
+                        });
+                    </script>
+                    <?php } ?>
+
+                        <?php clearFlash('errors'); ?>
+
+
+                    <?php } ?>
                 </div><!--end row-->
             </div>
 
@@ -291,3 +287,32 @@
     </div>
     <!--end switcher-->
 </section>
+
+<script>
+    const eventSource = new EventSource('/streamTables');
+
+    eventSource.onmessage = function(event) {
+        const tables = JSON.parse(event.data);
+
+        let html = '';
+        tables.forEach(table => {
+            html += `
+                        <button class="btn btn-transparent" data-bs-toggle="modal" data-bs-target="#addReservation${table.table_number}">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    ${table.status === "dipesan" ? "<i class='text-primary' data-feather='check-circle'></i>" : ''}
+                                    <p class="mb-0 mt-3">Meja ${table.table_number}</p>
+                                    <p class="mb-0">Kapasitas: ${table.capacity}</p>
+                                </div>
+                            </div>
+                        </button>
+                    `;
+        });
+
+        document.getElementById('reservationsTables').innerHTML = html;
+    };
+
+    eventSource.onerror = function(error) {
+        console.error('SSE error:', error);
+    };
+</script>

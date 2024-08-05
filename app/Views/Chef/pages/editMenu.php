@@ -42,62 +42,129 @@
                 </div>
                 <!--end breadcrumb-->
 
+                <?php if (getFlash('error')){ ?>
+                    <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                        <div class="d-flex align-items-center">
+                            <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0 text-white">Danger</h6>
+                                <div class="text-white"><?=getFlash('error'); ?></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php clearFlash('error'); ?>
+                <?php } ?>
+
+                <?php if (getFlash('success')){ ?>
+                    <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                        <div class="d-flex align-items-center">
+                            <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0 text-white">Success</h6>
+                                <div class="text-white"><?= getFlash('success') ?></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php clearFlash('success'); ?>
+                <?php } ?>
+
                 <div class="card">
                     <div class="card-body p-4">
                         <h5 class="card-title">Edit Menu</h5>
                         <hr/>
-                        <div class="form-body mt-4">
-                            <div class="row">
-                                <div class="col-lg-8">
-                                    <div class="border border-3 p-4 rounded">
-                                        <div class="mb-3">
-                                            <label for="inputProductTitle" class="form-label">Nama Menu</label>
-                                            <input type="email" class="form-control" id="inputProductTitle" placeholder="Enter product title">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="inputProductDescription" class="form-label">Deskripsi</label>
-                                            <textarea class="form-control" id="inputProductDescription" rows="3"></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="inputProductDescription" class="form-label">Foto Menu</label>
-                                            <input id="image-uploadify" type="file" accept=".xlsx,.xls,image/*,.doc,audio/*,.docx,video/*,.ppt,.pptx,.txt,.pdf" multiple>
+                        <form action="/edit-menu" method="POST" enctype="multipart/form-data">
+                            <?=getCsrf()->input('csrf_token');?>
+                            <input type="hidden" name="id" value="<?= $menu[0]['id'] ?>">
+                            <div class="form-body mt-4">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <div class="border border-3 p-4 rounded">
+                                            <div class="mb-3">
+                                                <label for="inputProductTitle" class="form-label">Nama Menu</label>
+                                                <input type="text" name="name" class="form-control <?= (getFlash('errors')['name'] ?? '') ? 'is-invalid' : '' ?>" id="inputProductTitle" value="<?= $menu[0]['menu'] ?? (getFlash('old')['name'] ?? '')?>" placeholder="Masukkan Nama Menu">
+                                                <?php if (getFlash('errors')['name'] ?? '') { ?>
+                                                    <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['name'] ?? '' ?></div>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="inputProductDescription" class="form-label">Deskripsi</label>
+                                                <textarea name="description" class="form-control" id="inputProductDescription" rows="3"><?= $menu[0]['description'] ?? (getFlash('old')['description'] ?? '')?></textarea>
+                                            </div>
+                                            <div class="mb-3">
+                                                <?php var_dump($menu[0]['image'] ); ?>
+                                                <label for="inputProductDescription" class="form-label">Foto Menu</label>
+                                                <input name="image" id="image" class="form-control <?= (getFlash('errors')['image'] ?? '') ? 'is-invalid' : '' ?>" value="<?= $menu[0]['image'] ?>" type="file">
+                                                <?php if (getFlash('errors')['image'] ?? '') { ?>
+                                                    <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['image'] ?? '' ?></div>
+                                                <?php } ?>
+                                            </div>
+                                            <div class="mb-3">
+                                                <img id="showImage" src="<?= !empty($menu[0]['image']) ? "/uploads/menus/{$menu[0]['image']}" : "/assets/images/no-image-available.jpeg"  ?>" class="rounded img-thumbnail" alt="Card Image Cap">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-4">
-                                    <div class="border border-3 p-4 rounded">
-                                        <div class="row g-3">
-                                            <div class="col-md-12">
-                                                <label for="inputPrice" class="form-label">Harga</label>
-                                                <input type="number" class="form-control" inputmode="number" id="inputPrice" placeholder="00.00">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label for="inputCostPerPrice" class="form-label">Stok Awal</label>
-                                                <input type="number" class="form-control" id="inputCostPerPrice" placeholder="cth : 100">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label for="inputStarPoints" class="form-label">Lama Penyajian (menit)</label>
-                                                <input type="text" class="form-control" id="inputStarPoints" placeholder="cth: 45">
-                                            </div>
-                                            <div class="col-12">
-                                                <label for="inputProductType" class="form-label">Kategori Menu</label>
-                                                <select class="form-select" id="inputProductType">
-                                                    <option></option>
-                                                    <option value="1">One</option>
-                                                    <option value="2">Two</option>
-                                                    <option value="3">Three</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-12">
-                                                <div class="d-grid">
-                                                    <button type="button" class="btn btn-primary">Simpan Menu</button>
+                                    <div class="col-lg-4">
+                                        <div class="border border-3 p-4 rounded">
+                                            <div class="row g-3">
+                                                <div class="col-md-12">
+                                                    <label for="inputPrice" class="form-label">Harga</label>
+                                                    <input type="number" name="price" class="form-control <?= (getFlash('errors')['price'] ?? '') ? 'is-invalid' : '' ?>" inputmode="number" value="<?= $menu[0]['price'] ?? (getFlash('old')['price'] ?? '')?>" id="inputPrice" placeholder="00.00">
+                                                    <?php if (getFlash('errors')['price'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['price'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="inputCostPerPrice" class="form-label">Stok</label>
+                                                    <input type="number" name="stock" class="form-control <?= (getFlash('errors')['stock'] ?? '') ? 'is-invalid' : '' ?>" id="inputCostPerPrice" value="<?=$menu[0]['stock'] ?? (getFlash('old')['stock'] ?? '')?>" placeholder="cth : 100">
+                                                    <?php if (getFlash('errors')['stock'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['stock'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="inputCostPerPrice" class="form-label">Minimal Stok</label>
+                                                    <input type="number" name="min_stock" class="form-control <?= (getFlash('errors')['min_stock'] ?? '') ? 'is-invalid' : '' ?>" id="inputCostPerPrice" value="<?= $menu[0]['min_stock'] ?? (getFlash('old')['min_stock'] ?? '')?>" placeholder="cth : 100">
+                                                    <?php if (getFlash('errors')['min_stock'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['min_stock'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label for="inputStarPoints" class="form-label">Lama Penyajian (menit)</label>
+                                                    <input type="text" name="cooking_time" class="form-control <?= (getFlash('errors')['cooking_time'] ?? '') ? 'is-invalid' : '' ?>" id="inputStarPoints" value="<?= $menu[0]['cooking_time'] ?? (getFlash('old')['cooking_time'] ?? '')?>" placeholder="cth: 45">
+                                                    <?php if (getFlash('errors')['cooking_time'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['cooking_time'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="inputProductType" class="form-label">Kategori Menu</label>
+                                                    <select name="category_id" class="form-select <?= (getFlash('errors')['category_id'] ?? '') ? 'is-invalid' : '' ?>" id="inputProductType">
+                                                        <option value="" selected>Pilih Kategori .. </option>
+                                                        <?php foreach ($categories as $category) { ?>
+                                                            <option value="<?= $category['id'] ?>" <?= (isset($menu[0]['category_id']) ? $menu[0]['category_id'] : (getFlash('old')['category_id'] ?? '')) == $category['id'] ? 'selected' : '' ?>>
+                                                                <?= $category['category'] ?>
+                                                            </option>
+                                                        <?php } ?>
+                                                    </select>
+                                                    <?php if (getFlash('errors')['category_id'] ?? '') { ?>
+                                                        <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['category_id'] ?? '' ?></div>
+                                                    <?php } ?>
+                                                    <?php clearFlash('errors'); ?>
+                                                    <?php clearFlash('old'); ?>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="d-grid">
+                                                        <button type="submit" class="btn btn-primary">Simpan Menu</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div><!--end row-->
-                        </div>
+                                </div><!--end row-->
+                            </div>
+                        </form>
                     </div>
                 </div>
 
@@ -212,3 +279,22 @@
     </div>
     <!--end switcher-->
 </section>
+
+<script>
+    function showImageByUserInput(){
+
+        $(document).ready(function(){
+
+            $('#image').change(function(e){
+
+                var reader = new FileReader();
+                reader.onload = function(e){
+                    $('#showImage').attr('src', e.target.result);
+                    $('#showImage').show();
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            });
+        });
+    }
+    showImageByUserInput()
+</script>

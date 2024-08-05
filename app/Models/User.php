@@ -1,6 +1,5 @@
 <?php
 
-
 function save(array $request): bool{
 
     try {
@@ -10,7 +9,7 @@ function save(array $request): bool{
             $request['first_name'],
             $request['last_name'],
             $request['email'],
-            $request['password'],
+            password_hash($request['password'], PASSWORD_DEFAULT),
             $request['address'],
             $request['address2'],
             $request['city'],
@@ -23,7 +22,7 @@ function save(array $request): bool{
 
         return true;
     } catch (PDOException $e) {
-        throw new Exception($e->getMessage());
+//        throw new Exception($e->getMessage());
         return false;
     }
 }

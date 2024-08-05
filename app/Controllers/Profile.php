@@ -33,7 +33,7 @@ function profileUpdate(): void{
             "state" => $_POST['state'],
             "zip" => $_POST['zip'] ,
             "profile_img" => $_FILES['profile_img']['tmp_name'] ?? null,
-            "id" => getAuth()->id(),
+            "id" => getAuth()->getUserId(),
         ];
 
 //        if ($find == $request) {

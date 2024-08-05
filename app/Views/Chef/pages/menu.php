@@ -161,241 +161,161 @@
                 <div class="row product-grid mt-4">
                     <div class="col-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="row">
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card">
-                                    <img src="assets/images/products/01.png" class="card-img-top" alt="...">
-                                    <div class="">
-                                        <div class="position-absolute top-0 end-0 product-discount font-22 ">
-                                            <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bx bx-dots-horizontal-rounded"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-                                                <li><a class="dropdown-item" href="/edit-menu">Edit Menu</a></li>
-                                                <li><a class="dropdown-item text-danger" href="#">Hapus Menu</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="card-body">
-                                        <span class="menu-category">Dessert</span>
-                                        <h6 class="card-title menu-title cursor-pointer">Nest Shaped Chair Shaped Chair</h6>
-                                        <div class="clearfix">
-                                            <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
-                                            <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. 250.000</span></p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-12 pt-3">
-                                                <button class="btn btn-outline-info w-100" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal"> Info </button>
+
+                            <?php foreach ($menus as $menu) { ?>
+
+                                <div class="col-6 col-sm-6 col-md-4 col-lg-3">
+                                    <div class="card">
+                                        <img src="uploads/menus/<?= $menu['image'] ?>" class="card-img-top" alt="<?= $menu['image'] ?>">
+                                        <div class="">
+                                            <div class="position-absolute bg-transparent top-0 end-0 product-discount font-22 ">
+                                                <button id="btnGroupDrop1" type="button" class="btn btn-transparent" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="bx bx-dots-horizontal-rounded text-white"></i>
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                                                    <li><a class="dropdown-item" href="/edit-menu/id/<?= $menu['id'] ?>">Edit Menu</a></li>
+                                                    <li><a class="dropdown-item text-danger" href="/hapus-menu/id/<?= $menu['id'] ?>">Hapus Menu</a></li>
+                                                </ul>
                                             </div>
                                         </div>
+                                        <div class="card-body">
+                                            <span class="menu-category"><?= $menu['category'] ?></span>
+                                            <h6 class="card-title menu-title cursor-pointer py-1"><?= $menu['menu'] ?></h6>
+                                            <div class="clearfix">
+                                                <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
+                                                <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. <?= number_format($menu['price']) ?></span></p>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 col-sm-12 col-md-12 col-lg-12 pt-3">
+                                                    <button class="btn btn-outline-info w-100" type="button" data-bs-toggle="modal" data-bs-target="#menuInfo<?= $menu['id'] ?>"> Info </button>
+                                                </div>
+                                            </div>
 
-                                        <!-- Modal Info Menu-->
-                                        <div class="modal fade" id="exampleModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-xl">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">Informasi Menu</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row d-flex align-items-center">
-                                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                                                <img src="assets/images/products/01.png" class="card-img-top img-fluid" alt="...">
-                                                            </div>
-                                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6">
-                                                                <div class="table-responsive p-3" >
-                                                                    <table class="mb-0" width="100%">
-                                                                        <tr>
-                                                                            <td colspan="2">
-                                                                                <h6 class="mb-0 title-pay-info">Tacos With Chicken Griller</h6>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <p class="mb-0 mt-1 pay-info-value pt-1">Dibuat pada 29-07-2024</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2"><hr></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <h6 class="mb-0 title-pay-info">Deskripsi</h6>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2">
-                                                                                <p class="mb-0 mt-3 pay-info-value">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam consectetur debitis delectus deleniti, explicabo fugit id ipsum labore laboriosam laudantium nam nisi pariatur quas quis quisquam quo quod ratione totam!</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2"><hr></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <h6 class="mb-0 title-pay-info">Info Detail</h6>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <p class="mb-0 mt-3 pay-info-value">Kategori</p>
-                                                                            </td>
-                                                                            <td align="right">
-                                                                                <p class="mb-0 mt-3 pay-info-value">Main Course</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <p class="mb-0 mt-1 pay-info-value">Harga</p>
-                                                                            </td>
-                                                                            <td align="right">
-                                                                                <p class="mb-0 mt-1 fw-bold pay-info-value">Rp. 200.000</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <p class="mb-0 mt-1 pay-info-value">Lama Penyajiam</p>
-                                                                            </td>
-                                                                            <td align="right">
-                                                                                <p class="mb-0 mt-1 pay-info-value">45 Menit</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2"><hr></td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <h6 class="mb-0 title-pay-info">Info Stok</h6>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <p class="mb-0 mt-3 pay-info-value">Sisa Stok</p>
-                                                                            </td>
-                                                                            <td align="right">
-                                                                                <p class="mb-0 mt-3 pay-info-value">45 porsi</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <p class="mb-0 mt-1 pay-info-value">Status</p>
-                                                                            </td>
-                                                                            <td align="right">
-                                                                                <p class="mb-0 mt-1 pay-info-value">Aman</p>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td colspan="2"><hr></td>
-                                                                        </tr>
-                                                                    </table>
+                                            <!-- Modal Info Menu-->
+                                            <div class="modal fade" id="menuInfo<?= $menu['id'] ?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Informasi Menu</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row d-flex align-items-center">
+                                                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                                                    <img src="uploads/menus/<?= $menu['image'] ?>" class="card-img-top img-fluid" alt="<?= $menu['image'] ?>">
+                                                                </div>
+                                                                <div class="col-12 col-sm-12 col-md-12 col-lg-6">
+                                                                    <div class="table-responsive p-3" >
+                                                                        <table class="mb-0" width="100%">
+                                                                            <tr>
+                                                                                <td colspan="2">
+                                                                                    <h6 class="mb-0 title-pay-info"><?= $menu['menu'] ?></h6>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-1 pay-info-value pt-1">Dibuat pada <?= date("d/m/Y", strtotime($menu['created_at'])) ?></p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td colspan="2"><hr></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <h6 class="mb-0 title-pay-info">Deskripsi</h6>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td colspan="2">
+                                                                                    <p class="mb-0 mt-3 pay-info-value"><?= $menu['description'] ?></p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td colspan="2"><hr></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <h6 class="mb-0 title-pay-info">Info Detail</h6>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-3 pay-info-value">Kategori</p>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <p class="mb-0 mt-3 pay-info-value"><?= $menu['category'] ?></p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-1 pay-info-value">Harga</p>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <p class="mb-0 mt-1 fw-bold pay-info-value">Rp. <?= number_format($menu['price']) ?></p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-1 pay-info-value">Lama Penyajiam</p>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <p class="mb-0 mt-1 pay-info-value"><?= $menu['cooking_time'] ?> Menit</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td colspan="2"><hr></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <h6 class="mb-0 title-pay-info">Info Stok</h6>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-3 pay-info-value">Sisa Stok</p>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <p class="mb-0 mt-3 pay-info-value"><?= $menu['stock'] ?> porsi</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-1 pay-info-value">Minimal Stok</p>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <p class="mb-0 mt-1 pay-info-value"><?= $menu['min_stock'] ?> porsi</p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td>
+                                                                                    <p class="mb-0 mt-1 pay-info-value">Status</p>
+                                                                                </td>
+                                                                                <td align="right">
+                                                                                    <p class="mb-0 mt-1 pay-info-value">
+                                                                                        <?= ($menu['stock'] < $menu['min_stock'] && $menu['stock'] > 0 ) ? 'Menipis' : 'Aman' ?>
+                                                                                    </p>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td colspan="2"><hr></td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+
+
                                                     </div>
-
-
                                                 </div>
                                             </div>
-                                        </div>
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card">
-                                    <img src="assets/images/products/01.png" class="card-img-top" alt="...">
-                                    <div class="">
-                                        <div class="position-absolute top-0 end-0 m-3 product-discount"><span class="">-10%</span></div>
-                                    </div>
-                                    <div class="card-body">
-                                        <span class="menu-category">Dessert</span>
-                                        <h6 class="card-title menu-title cursor-pointer">Nest Shaped Chair Shaped Chair</h6>
-                                        <div class="clearfix">
-                                            <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
-                                            <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. 250.000</span></p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-primary w-100" type="button" > Edit </button>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-outline-info w-100" type="button" > Info </button>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card">
-                                    <img src="assets/images/products/01.png" class="card-img-top" alt="...">
-                                    <div class="">
-                                        <div class="position-absolute top-0 end-0 m-3 product-discount"><span class="">-10%</span></div>
-                                    </div>
-                                    <div class="card-body">
-                                        <span class="menu-category">Dessert</span>
-                                        <h6 class="card-title menu-title cursor-pointer">Nest Shaped Chair Shaped Chair</h6>
-                                        <div class="clearfix">
-                                            <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
-                                            <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. 250.000</span></p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-primary w-100" type="button" > Edit </button>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-outline-info w-100" type="button" > Info </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card">
-                                    <img src="assets/images/products/01.png" class="card-img-top" alt="...">
-                                    <div class="">
-                                        <div class="position-absolute top-0 end-0 m-3 product-discount"><span class="">-10%</span></div>
-                                    </div>
-                                    <div class="card-body">
-                                        <span class="menu-category">Dessert</span>
-                                        <h6 class="card-title menu-title cursor-pointer">Nest Shaped Chair Shaped Chair</h6>
-                                        <div class="clearfix">
-                                            <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
-                                            <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. 250.000</span></p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-primary w-100" type="button" > Edit </button>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-outline-info w-100" type="button" > Info </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-6 col-sm-6 col-md-4 col-lg-3">
-                                <div class="card">
-                                    <img src="assets/images/products/01.png" class="card-img-top" alt="...">
-                                    <div class="">
-                                        <div class="position-absolute top-0 end-0 m-3 product-discount"><span class="">-10%</span></div>
-                                    </div>
-                                    <div class="card-body">
-                                        <span class="menu-category">Dessert</span>
-                                        <h6 class="card-title menu-title cursor-pointer">Nest Shaped Chair Shaped Chair</h6>
-                                        <div class="clearfix">
-                                            <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
-                                            <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. 250.000</span></p>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-primary w-100" type="button" > Edit </button>
-                                            </div>
-                                            <div class="col-12 col-sm-12 col-md-12 col-lg-6 pt-3">
-                                                <button class="btn btn-outline-info w-100" type="button" > Info </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+
+                            <?php } ?>
+
                         </div>
                     </div>
                 </div><!--end row-->

@@ -31,7 +31,9 @@ add('POST', '/managemen-karyawan/edit', 'Manager', 'editUsers', ['checkAccessRol
 add('GET', '/pelayan', 'Waiter', 'home', ['checkAccessRole']);
 add('GET', '/pesanan', 'Waiter', 'order', ['checkAccessRole']);
 add('GET', '/buat-pesanan', 'Waiter', 'makeOrder', ['checkAccessRole']);
+add('POST', '/reservasi-meja/add', 'Waiter', 'addNewReservation', ['checkAccessRole']);
 add('GET', '/reservasi-meja', 'Waiter', 'makeReservation', ['checkAccessRole']);
+add('GET', '/streamTables', 'Waiter', 'streamReservation', ['checkAccessRole']);
 
 //Cashier Router
 add('GET', '/kasir', 'Cashier', 'home', ['checkAccessRole']);
@@ -42,8 +44,14 @@ add('GET', '/rekapitulasi', 'Cashier', 'recap', ['checkAccessRole']);
 add('GET', '/koki', 'Chef', 'home', ['checkAccessRole']);
 add('GET', '/menu', 'Chef', 'menu', ['checkAccessRole']);
 add('GET', '/tambah-menu', 'Chef', 'addNewMenu', ['checkAccessRole']);
-add('GET', '/edit-menu', 'Chef', 'editMenu', ['checkAccessRole']);
+add('POST', '/tambah-menu/add', 'Chef', 'postAddNewMenu', ['checkAccessRole']);
+add('GET', '/edit-menu/id/([0-9a-zA-Z-]*)', 'Chef', 'editMenu', ['checkAccessRole']);
+add('POST', '/edit-menu', 'Chef', 'postEditMenu', ['checkAccessRole']);
+add('GET', '/hapus-menu/id/([0-9a-zA-Z-]*)', 'Chef', 'deleteMenu', ['checkAccessRole']);
 add('GET', '/kategori-menu', 'Chef', 'category', ['checkAccessRole']);
+add('POST', '/kategori-menu/add', 'Chef', 'addCategory', ['checkAccessRole']);
+add('POST', '/kategori-menu/edit', 'Chef', 'editCategory', ['checkAccessRole']);
+add('GET', '/kategori-menu/delete/id/([0-9a-zA-Z-]*)', 'Chef', 'deleteCategory', ['checkAccessRole']);
 
 // Profile Router
 add('GET', '/profile', 'Profile', 'home', ['checkAccessRole']);

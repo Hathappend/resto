@@ -79,7 +79,7 @@
                                     </div>
                                 </td>
                             </tr>
-                            <!-- Modal Confirmation Orders-->
+                            <!-- Modal Orders-->
                             <div class="modal fade" id="modalInfoTrans<?=$order['id']?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                     <div class="modal-dialog modal-xl">
                                         <div class="modal-content">

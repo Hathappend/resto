@@ -35,6 +35,32 @@ function saveOrder(array $request): bool
     }
 }
 
+function confirm(string $id): bool{
+
+    $conn = getConnection();
+
+    try {
+
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("UPDATE orders SET status = ?, cashier_id=? WHERE id = ?");
+        $stmt->execute([
+            "menunggu koki",
+            getAuth()->getUserId(),
+            $id
+        ]);
+
+        $conn->commit();
+
+        return true;
+    } catch (PDOException $e) {
+        $conn->rollBack();
+
+        return false;
+    }
+
+}
+
 function getOrderById(string $id): array{
 
     $stmt = getConnection()->prepare("
@@ -113,19 +139,41 @@ function getAllOrders(): array{
         o.queue_number, 
         o.sub_total, o.total, 
         o.note, 
-        o.created_at, 
+        o.created_at,
+        o.cashier_id,
         r.table_number 
     FROM orders AS o 
     JOIN reservations AS r ON o.reservation_id = r.id
     ORDER BY 
         o.status = 'belum dibayar' DESC,
         o.queue_number ASC,
-        o.created_at DESC; 
+        DATE(o.created_at) DESC; 
         ");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
+function getAllOrdersHistory(): array{
+
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, o.total, 
+        o.note, 
+        o.created_at,
+        o.cashier_id,
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    ORDER BY o.created_at DESC
+        ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getTodayOrders(): array {
@@ -147,6 +195,34 @@ function getTodayOrders(): array {
         o.status = 'belum dibayar' DESC,
         o.queue_number ASC,
         o.created_at DESC;
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getTodayOrdersWaitConfirm(): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) = CURDATE()
+    ORDER BY 
+        CASE 
+            WHEN o.status = 'menunggu konfirmasi' THEN 1
+            WHEN o.status = 'menunggu koki' THEN 2
+            ELSE 3
+        END,
+        o.queue_number ASC
     ");
     $stmt->execute();
 

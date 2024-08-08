@@ -12,6 +12,10 @@ function showColorClassBadge(string $status, string $useFor): string{
             return "bg-warning";
         }
 
+        if ($status == "menunggu koki") {
+            return "bg-secondary";
+        }
+
     }
 
     return "";
@@ -31,6 +35,13 @@ function showClassColorStatus(string $status): array{
         return [
             "text" => "text-warning",
             "bg"  => "bg-warning"
+        ];
+    }
+
+    elseif ($status == 'menunggu koki'){
+        return [
+            "text" => "text-secondary",
+            "bg"  => "bg-secondary"
         ];
     }
 

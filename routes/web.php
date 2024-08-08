@@ -42,6 +42,7 @@ add('GET', '/streamTables', 'Waiter', 'streamReservation', ['checkAccessRole']);
 add('GET', '/kasir', 'Cashier', 'home', ['checkAccessRole']);
 add('GET', '/histori-transaksi', 'Cashier', 'transactionHistory', ['checkAccessRole']);
 add('GET', '/rekapitulasi', 'Cashier', 'recap', ['checkAccessRole']);
+add('POST', '/kasir/konfirmasi/id/([0-9a-zA-Z-]*)', 'Cashier', 'confirmOrder', ['checkAccessRole']);
 
 //Chef Router
 add('GET', '/koki', 'Chef', 'home', ['checkAccessRole']);

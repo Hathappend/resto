@@ -1,3 +1,5 @@
+
+
 <!-- Bootstrap JS -->
 <script src="/assets/js/bootstrap.bundle.min.js"></script>
 <!--plugins-->
@@ -25,13 +27,11 @@
 <script src="/assets/js/dashboard-human-resources.js"></script>
 <script src="assets/js/dashboard-analytics.js"></script>
 <script>
-		$(document).ready(function () {
-			$('#image-uploadify').imageuploadify();
-		})
-	</script>
-<script>
 		$(document).ready(function() {
-			$('#example').DataTable();
+			$('#example').DataTable({
+			    ordering:  false
+			});
+
 		  } );
 </script>>
 <script>
@@ -45,10 +45,10 @@
 	feather.replace()
 </script>
 <script>
-		  $(function() {
-			  $(".knob").knob();
-		  });
-	  </script>
+  $(function() {
+      $(".knob").knob();
+  });
+</script>
 <script src="/assets/js/index.js"></script>
 <!--app JS-->
 <script src="/assets/js/app.js"></script>
@@ -56,6 +56,13 @@
 <!-- Custom Script -->
 <script src="/assets/js/script.js"></script>
 <script>
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+</script>
+<script>
+
       if (document.querySelector(".product-list")) {
         new PerfectScrollbar(".product-list");
        }

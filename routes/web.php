@@ -31,6 +31,9 @@ add('POST', '/managemen-karyawan/edit', 'Manager', 'editUsers', ['checkAccessRol
 add('GET', '/pelayan', 'Waiter', 'home', ['checkAccessRole']);
 add('GET', '/pesanan', 'Waiter', 'order', ['checkAccessRole']);
 add('GET', '/buat-pesanan', 'Waiter', 'makeOrder', ['checkAccessRole']);
+add('POST', '/pelayan/buat-pesanan/add', 'Waiter', 'placeOrder', ['checkAccessRole']);
+add('GET', '/pelayan/buat-pesanan/payment/id/([0-9a-zA-Z-]*)', 'Waiter', 'payment', ['checkAccessRole']);
+add('GET', '/pelayan/buat-pesanan/payment/success/id/([0-9a-zA-Z-]*)', 'Waiter', 'orderPayment', ['checkAccessRole']);
 add('POST', '/reservasi-meja/add', 'Waiter', 'addNewReservation', ['checkAccessRole']);
 add('GET', '/reservasi-meja', 'Waiter', 'makeReservation', ['checkAccessRole']);
 add('GET', '/streamTables', 'Waiter', 'streamReservation', ['checkAccessRole']);

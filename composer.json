@@ -18,6 +18,7 @@
         "respect/validation": "^2.3",
         "phpmailer/phpmailer": "^6.9",
         "league/flysystem": "3.0",
-        "intervention/image": "^3.7"
+        "intervention/image": "^3.7",
+        "midtrans/midtrans-php": "^2.5"
     }
 }

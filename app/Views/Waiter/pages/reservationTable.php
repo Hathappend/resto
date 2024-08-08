@@ -104,9 +104,24 @@
                                 </div>
                                 <div class="modal-body">
                                     <div class="container p-3">
+
+                                        <?php if (getFlash('errorInModal')){ ?>
+                                            <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                                                    </div>
+                                                    <div class="ms-3">
+                                                        <h6 class="mb-0 text-white">Danger</h6>
+                                                        <div class="text-white"><?= getFlash('errorInModal');?></div>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div>
+                                        <?php } ?>
+
                                         <form action="/reservasi-meja/add" method="POST">
                                             <?=getCsrf()->input('csrf_token');?>
-<!--                                            <input type="hidden" name="table_number" value="--><?php //=$table['table_number']?><!--">-->
+                                            <input type="hidden" name="table_number" value="<?=$table['table_number']?>">
                                             <div class="row mb-3">
                                                 <label for="inputEmail3" class="col-sm-3 col-form-label">Nomor Meja</label>
                                                 <div class="col-sm-9">
@@ -161,7 +176,10 @@
                         </div>
                     </div>
 
-                    <?php if (getFlash('errors')) {?>
+
+                    <?php } ?>
+
+                    <?php if (getFlash('errors') || getFlash('errorInModal')) {?>
                         <script>
                         document.addEventListener('DOMContentLoaded', function() {
                             var myModalElement = document.getElementById('addReservation<?=getFlash('table_number')?>');
@@ -171,10 +189,9 @@
                     </script>
                     <?php } ?>
 
-                        <?php clearFlash('errors'); ?>
+                    <?php clearFlash('errors'); ?>
+                    <?php clearFlash('errorInModal'); ?>
 
-
-                    <?php } ?>
                 </div><!--end row-->
             </div>
 

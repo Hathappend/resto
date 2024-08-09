@@ -70,8 +70,8 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0 text-secondary">Total Pengunjung Hari Ini</p>
-                                            <h4 class="my-1"><?= $dailyPaxTrends['new_pax'] ?></h4>
-                                            <p class="mb-0 font-13 <?= showClassTrends($dailyPaxTrends['trend'])['text'] ?>"><i class='bx <?= showClassTrends($dailyPaxTrends['trend'])['icon'] ?> align-middle'></i><?= $dailyPaxTrends['percentage']?>% dari 1 hari terakhir</p>
+                                            <h4 class="my-1"><?= $dailyPaxTrends['new_pax'] ?? 0 ?></h4>
+                                            <p class="mb-0 font-13 <?= showClassTrends($dailyPaxTrends['trend'] ?? 0)['text'] ?>"><i class='bx <?= showClassTrends($dailyPaxTrends['trend'] ?? 0)['icon'] ?> align-middle'></i><?= $dailyPaxTrends['percentage'] ?? 0?>% dari 1 hari terakhir</p>
                                         </div>
                                         <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
                                         </div>

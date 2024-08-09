@@ -45,6 +45,20 @@ function showClassColorStatus(string $status): array{
         ];
     }
 
+    elseif ($status == 'dimasak'){
+        return [
+            "text" => "text-info",
+            "bg"  => "bg-info"
+        ];
+    }
+
+    elseif ($status == 'selesai'){
+        return [
+            "text" => "text-success",
+            "bg"  => "bg-success"
+        ];
+    }
+
     else{
         return [
             "text" => "",

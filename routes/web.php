@@ -56,6 +56,8 @@ add('GET', '/kategori-menu', 'Chef', 'category', ['checkAccessRole']);
 add('POST', '/kategori-menu/add', 'Chef', 'addCategory', ['checkAccessRole']);
 add('POST', '/kategori-menu/edit', 'Chef', 'editCategory', ['checkAccessRole']);
 add('GET', '/kategori-menu/delete/id/([0-9a-zA-Z-]*)', 'Chef', 'deleteCategory', ['checkAccessRole']);
+add('POST', '/koki/konfirmasi/id/([0-9a-zA-Z-]*)', 'Chef', 'confirmOrderFromCashier', ['checkAccessRole']);
+add('POST', '/koki/selesai/id/([0-9a-zA-Z-]*)', 'Chef', 'confirmOrderReady', ['checkAccessRole']);
 
 // Profile Router
 add('GET', '/profile', 'Profile', 'home', ['checkAccessRole']);

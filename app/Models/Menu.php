@@ -78,9 +78,51 @@ function getAllMenu(): array{
 
 }
 
+function getTotalOrderMenuById(?string $id): array{
+
+    $stmt = getConnection()->prepare("
+    SELECT 
+        m.menu,  
+        SUM(od.qty) AS total_qty
+    FROM 
+        orders_details od
+    JOIN 
+        orders o ON o.id = od.orders_id 
+    JOIN
+        menus m ON od.menu_id = m.id 
+    WHERE 
+        m.id = ?
+    GROUP BY 
+        m.menu
+    ");
+
+    $stmt->execute([$id]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
+
 function getMenuStockInDanger(): array {
 
     $stmt = getConnection()->prepare("SELECT id,menu,stock,min_stock FROM menus WHERE stock < min_stock ORDER BY stock ASC");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
+
+function getOutOfStock(): array {
+
+    $stmt = getConnection()->prepare("SELECT id,menu,stock,min_stock FROM menus WHERE stock = 0 ORDER BY stock ASC");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+}
+
+function getSafeStock(): array {
+
+    $stmt = getConnection()->prepare("SELECT id,menu,stock,min_stock FROM menus WHERE stock > min_stock ORDER BY stock ASC");
     $stmt->execute();
 
     return $stmt->fetchAll(PDO::FETCH_ASSOC);

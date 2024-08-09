@@ -48,8 +48,7 @@
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <p class="mb-0 text-secondary">Stok Habis</p>
-                                        <h4 class="my-1">$4805</h4>
-                                        <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p>
+                                        <h4 class="my-1"><?= count($outOfStocks) ?></h4>
                                     </div>
                                     <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
                                     </div>
@@ -63,8 +62,7 @@
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <p class="mb-0 text-secondary">Stok Menipis</p>
-                                        <h4 class="my-1">$4805</h4>
-                                        <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p>
+                                        <h4 class="my-1"><?= count($dangerStocks) ?></h4>
                                     </div>
                                     <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
                                     </div>
@@ -78,8 +76,7 @@
                                 <div class="d-flex align-items-center">
                                     <div>
                                         <p class="mb-0 text-secondary">Stok Aman</p>
-                                        <h4 class="my-1">$4805</h4>
-                                        <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p>
+                                        <h4 class="my-1"><?= count($safeStocks) ?></h4>
                                     </div>
                                     <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
                                     </div>
@@ -113,6 +110,7 @@
                                                             <button id="btnGroupDrop1" type="button" class="btn btn-white dropdown-toggle dropdown-toggle-nocaret px-1" data-bs-toggle="dropdown" aria-expanded="false">
                                                                 <i class='bx bx-chevron-down'></i>
                                                             </button>
+                                                            <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                             <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
                                                                 <li><a class="dropdown-item" href="#">Dropdown link</a></li>
                                                                 <li><a class="dropdown-item" href="#">Dropdown link</a></li>
@@ -182,9 +180,12 @@
                                             <span class="menu-category"><?= $menu['category'] ?></span>
                                             <h6 class="card-title menu-title cursor-pointer py-1"><?= $menu['menu'] ?></h6>
                                             <div class="clearfix">
-                                                <p class="total-ordered mb-0 float-start pt-2"><strong>134</strong>x Dipesan</p>
+                                                <p class="total-ordered mb-0 float-start pt-2">
+                                                    <?= isset(getTotalOrderMenuById($menu['id'] ?? '')[0]['total_qty']) ? getTotalOrderMenuById($menu['id'] ?? '')[0]['total_qty'] . 'x Dipesan' : 'Belum ada pesanan'?>
+                                                </p>
                                                 <p class="price-label mb-0 float-end fw-bold pt-2"><span>Rp. <?= number_format($menu['price']) ?></span></p>
                                             </div>
+
                                             <div class="row">
                                                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 pt-3">
                                                     <button class="btn btn-outline-info w-100" type="button" data-bs-toggle="modal" data-bs-target="#menuInfo<?= $menu['id'] ?>"> Info </button>

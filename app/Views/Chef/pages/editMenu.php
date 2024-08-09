@@ -95,7 +95,6 @@
                                                 <textarea name="description" class="form-control" id="inputProductDescription" rows="3"><?= $menu[0]['description'] ?? (getFlash('old')['description'] ?? '')?></textarea>
                                             </div>
                                             <div class="mb-3">
-                                                <?php var_dump($menu[0]['image'] ); ?>
                                                 <label for="inputProductDescription" class="form-label">Foto Menu</label>
                                                 <input name="image" id="image" class="form-control <?= (getFlash('errors')['image'] ?? '') ? 'is-invalid' : '' ?>" value="<?= $menu[0]['image'] ?>" type="file">
                                                 <?php if (getFlash('errors')['image'] ?? '') { ?>

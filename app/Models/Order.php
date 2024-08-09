@@ -61,6 +61,56 @@ function confirm(string $id): bool{
 
 }
 
+function confirmOrderByChef(string $id): bool{
+
+    $conn = getConnection();
+
+    try {
+
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->execute([
+            "dimasak",
+            $id
+        ]);
+
+        $conn->commit();
+
+        return true;
+    } catch (PDOException $e) {
+        $conn->rollBack();
+
+        return false;
+    }
+
+}
+
+function confirmOrderDoneByChef(string $id): bool{
+
+    $conn = getConnection();
+
+    try {
+
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->execute([
+            "selesai",
+            $id
+        ]);
+
+        $conn->commit();
+
+        return true;
+    } catch (PDOException $e) {
+        $conn->rollBack();
+
+        return false;
+    }
+
+}
+
 function getOrderById(string $id): array{
 
     $stmt = getConnection()->prepare("
@@ -229,6 +279,72 @@ function getTodayOrdersWaitConfirm(): array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getTodayOrdersWaitConfirmChef(): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) = CURDATE() AND o.status = 'menunggu koki'
+    ORDER BY o.queue_number ASC
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getTodayOrdersProcessingByChef(): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) = CURDATE() AND o.status = 'dimasak'
+    ORDER BY o.queue_number ASC
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getTodayOrdersDone(): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) = CURDATE() AND o.status = 'selesai'
+    ORDER BY o.queue_number ASC
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getTopMenus(): array{
 
     $stmt = getConnection()->prepare("
@@ -330,8 +446,25 @@ function getMonthOrderTrends(): array {
     ];
 }
 
+function getDayOrderTrends(): array {
+    $conn = getConnection();
+
+    $currentCount = getCount($conn, date('Y-m-d'), date('Y-m-d', strtotime('+1 day')), "orders");
+
+    $previousCount = getCount($conn, date('Y-m-d', strtotime('-1 day')), date('Y-m-d'), "orders");
+
+    $change = calculatePercentageChange($currentCount, $previousCount);
+
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'new_order' => $currentCount
+    ];
+}
+
+
 // Fungsi untuk mendapatkan jumlah pax berdasarkan rentang waktu
-function getPaxCount($conn, $startTime, $endTime): int {
+function getPaxCount($conn, $startTime, $endTime): ?int {
     $stmt = $conn->prepare("
         SELECT SUM(pax) AS total_pax 
         FROM reservations 
@@ -342,7 +475,7 @@ function getPaxCount($conn, $startTime, $endTime): int {
 }
 
 // Fungsi untuk mendapatkan tren jumlah pax dalam interval 1 hari
-function getDailyPaxTrends(): array {
+function getDailyPaxTrends(): ?array {
     $conn = getConnection();
 
     // Hitung jumlah pax hari ini

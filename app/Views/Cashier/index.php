@@ -104,7 +104,7 @@
                                                             </div>
                                                             <div class="col-12 col-sm-12 col-md-6 col-lg-6">
 
-                                                                <div class="table-responsive p-3" >
+                                                                <div class="table-respons p-3" >
                                                                     <table class="mb-0" width="100%">
                                                                         <tr>
                                                                             <td>

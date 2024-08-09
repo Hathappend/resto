@@ -5,8 +5,11 @@ use JetBrains\PhpStorm\NoReturn;
 require __DIR__ . '/../Helpers/view.php';
 require __DIR__ . '/../Helpers/file.php';
 require __DIR__ . "/../Helpers/image.php";
+require __DIR__ . "/../Helpers/badge.php";
 require __DIR__ . '/../Models/Category.php';
 require __DIR__ . '/../Models/Menu.php';
+require __DIR__ . '/../Models/Order.php';
+require __DIR__ . '/../Models/OrderDetail.php';
 require __DIR__ . '/../Request/menuRequest.php';
 require __DIR__ . '/../Request/categoryRequest.php';
 
@@ -15,8 +18,49 @@ use Respect\Validation\Validator as v;
 function home(): void{
 
     view("Chef/index", [
-        "title" => "Halaman Koki"
+        "title" => "Halaman Koki",
+        "todayOrders" => getTodayOrdersWaitConfirmChef(),
+        "todayProcessingOrders" => getTodayOrdersProcessingByChef(),
+        "todayDoneOrders" => getTodayOrdersDone(),
+        "topMenus" => getTopMenus(),
+        "newOrderTrends" => getOrderTrends(),
+        "dayOrderTrends" => getDayOrderTrends(),
+        "menuStockInDanger" => getMenuStockInDanger(),
+        "allTodayOrders" => getTodayOrders(),
+        "dangerStocks" => getMenuStockInDanger()
+
     ]);
+
+}
+function confirmOrderFromCashier(string $id){
+
+    if (getCsrf()->validate('csrf_token')) {
+
+        $confirmed = confirmOrderByChef($id);
+        if ($confirmed) {
+            flash('success', "Berhasil Mengkonfirmasi Pesanan #{$id}");
+        } else {
+            flash('error', "Error Tak Terduga");
+        }
+    }
+    header('Location: /koki');
+    exit();
+
+}
+
+function confirmOrderReady(string $id){
+
+    if (getCsrf()->validate('csrf_token')) {
+
+        $confirmed = confirmOrderDoneByChef($id);
+        if ($confirmed) {
+            flash('success', "Pesanan #{$id} Sudah Siap Disajikan");
+        } else {
+            flash('error', "Error Tak Terduga");
+        }
+    }
+    header('Location: /koki');
+    exit();
 
 }
 
@@ -24,7 +68,10 @@ function menu(): void{
 
     view("Chef/pages/menu", [
         "title" => "Daftar Menu",
-        "menus" => getAllMenu()
+        "menus" => getAllMenu(),
+        "dangerStocks" => getMenuStockInDanger(),
+        "outOfStocks" => getOutOfStock(),
+        "safeStocks"=> getSafeStock()
     ]);
 
 }

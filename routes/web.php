@@ -36,7 +36,8 @@ add('GET', '/pelayan/buat-pesanan/payment/id/([0-9a-zA-Z-]*)', 'Waiter', 'paymen
 add('GET', '/pelayan/buat-pesanan/payment/success/id/([0-9a-zA-Z-]*)', 'Waiter', 'orderPayment', ['checkAccessRole']);
 add('POST', '/reservasi-meja/add', 'Waiter', 'addNewReservation', ['checkAccessRole']);
 add('GET', '/reservasi-meja', 'Waiter', 'makeReservation', ['checkAccessRole']);
-add('GET', '/streamTables', 'Waiter', 'streamReservation', ['checkAccessRole']);
+add('POST', '/pelayan/delivery/id/([0-9a-zA-Z-]*)', 'Waiter', 'deliveryOrders', ['checkAccessRole']);
+add('POST', '/pelayan/selesai/id/([0-9a-zA-Z-]*)', 'Waiter', 'finishOrders', ['checkAccessRole']);
 
 //Cashier Router
 add('GET', '/kasir', 'Cashier', 'home', ['checkAccessRole']);

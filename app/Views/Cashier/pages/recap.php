@@ -13,6 +13,23 @@
     <div class="page-wrapper">
         <div class="page-content">
 
+            <!--breadcrumb-->
+            <div class="page-content-header d-flex justify-content-between align-items-center">
+                <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                    <div class="breadcrumb-title pe-3">U-Resto</div>
+                    <div class="ps-3">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 p-0">
+                                <li class="breadcrumb-item"><a href="/kasir"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">Rekapitulasi
+                        </nav>
+                    </div>
+                </div>
+                <!--end breadcrumb-->
+            </div>
+
+
             <?php if (getFlash('error')){ ?>
                 <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
                     <div class="d-flex align-items-center">
@@ -291,10 +308,9 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h5 class="mb-1">Info Rekap Harian</h5>
-                                    <p class="mb-0 font-13 text-secondary"><i class="bx bxs-calendar"></i>in last 30 days revenue</p>
                                 </div>
-                                <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
+                            <hr>
                             <div class="table-responsive mt-4">
                                 <table id="example2" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
@@ -337,10 +353,9 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h5 class="mb-1">Info Rekap Mingguan</h5>
-                                    <p class="mb-0 font-13 text-secondary"><i class="bx bxs-calendar"></i>in last 30 days revenue</p>
                                 </div>
-                                <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
+                            <hr>
                             <div class="table-responsive mt-4">
                                 <table id="example3" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
@@ -383,9 +398,7 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h5 class="mb-1">Info Rekap Bulanan</h5>
-                                    <p class="mb-0 font-13 text-secondary"><i class="bx bxs-calendar"></i>in last 30 days revenue</p>
                                 </div>
-                                <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
                             <div class="table-responsive mt-4">
                                 <table id="example4" class="table table-striped table-bordered" style="width:100%">
@@ -429,10 +442,9 @@
                             <div class="d-flex align-items-center">
                                 <div>
                                     <h5 class="mb-1">Info Rekap Tahunan</h5>
-                                    <p class="mb-0 font-13 text-secondary"><i class="bx bxs-calendar"></i>in last 30 days revenue</p>
                                 </div>
-                                <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
+                            <hr>
                             <div class="table-responsive mt-4">
                                 <table id="example5" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
@@ -481,104 +493,6 @@
     </footer>
 </div>
 <!--end wrapper-->
-<!--start switcher-->
-<div class="switcher-wrapper">
-    <div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
-    </div>
-    <div class="switcher-body">
-        <div class="d-flex align-items-center">
-            <h5 class="mb-0 text-uppercase">Theme Customizer</h5>
-            <button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Theme Styles</h6>
-        <hr/>
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="lightmode" checked>
-                <label class="form-check-label" for="lightmode">Light</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="darkmode">
-                <label class="form-check-label" for="darkmode">Dark</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="semidark">
-                <label class="form-check-label" for="semidark">Semi Dark</label>
-            </div>
-        </div>
-        <hr/>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="minimaltheme" name="flexRadioDefault">
-            <label class="form-check-label" for="minimaltheme">Minimal Theme</label>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Header Colors</h6>
-        <hr/>
-        <div class="header-colors-indigators">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="indigator headercolor1" id="headercolor1"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor2" id="headercolor2"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor3" id="headercolor3"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor4" id="headercolor4"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor5" id="headercolor5"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor6" id="headercolor6"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor7" id="headercolor7"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor8" id="headercolor8"></div>
-                </div>
-            </div>
-        </div>
-
-        <hr/>
-        <h6 class="mb-0">Sidebar Backgrounds</h6>
-        <hr/>
-        <div class="header-colors-indigators">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="indigator sidebarcolor1" id="sidebarcolor1"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor2" id="sidebarcolor2"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor3" id="sidebarcolor3"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor4" id="sidebarcolor4"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor5" id="sidebarcolor5"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor6" id="sidebarcolor6"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor7" id="sidebarcolor7"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor8" id="sidebarcolor8"></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-<!--end switcher-->
 
 <!--custom javascript for select year-->
 <script>

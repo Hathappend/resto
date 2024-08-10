@@ -47,6 +47,11 @@ function login(): void{
                     header('Location: /kasir');
                 }
             }
+            catch (\Delight\Auth\InvalidEmailException $e) {
+                header('Location: /login');
+                flash('errors', ['email' => 'Email Tidak Valid']);
+                die();
+            }
             catch (\Delight\Auth\InvalidPasswordException $e) {
                 header('Location: /login');
                 flash('errors', ['password' => 'Password Tidak Valid']);
@@ -95,14 +100,16 @@ function postForgotPassword(): void{
             'email' => $_POST['email']
         ];
 
+        $findUser = findUserByEmail($request['email']);
+
         $validated = userRequest($request);
 
         if ($validated) {
 
             try {
-                getAuth()->forgotPassword($request['email'], function ($selector, $token) use ($request) {
+                getAuth()->forgotPassword($request['email'], function ($selector, $token) use ($request, $findUser) {
                     $toEmail = $_POST['email'];
-                    sendEmail(toEmail: $toEmail, useFor: 'reset', selector: $selector, token: $token);
+                    sendEmail(toEmail: $toEmail, useFor: 'reset', selector: $selector, token: $token, user:$findUser);
                 }, 3600);
 
                 header('Location: /forgot-password');

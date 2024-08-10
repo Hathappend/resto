@@ -23,7 +23,8 @@ function home(): void{
         "reservationTrends" => getReservationTrends(),
         "dailyPaxTrends" => getDailyPaxTrends(),
         "topMenus" => getTopMenus(),
-        "dangerStocks" => getMenuStockInDanger()
+        "dangerStocks" => getMenuStockInDanger(),
+        "todayOrdersReadyAndDelivery" => getTodayOrdersReadyAndDelivery()
     ]);
 
 }
@@ -263,6 +264,39 @@ function orderPayment(string $id): void{
     }
 
     header("Location: /pelayan/buat-pesanan/payment/id/{$orders['id']}");
+    exit();
+
+}
+
+function deliveryOrders(string $id): void{
+
+    if (getCsrf()->validate('csrf_token')) {
+
+        $find = getOrderById($id)[0];
+        $confirmed = confirmOrderDeliveryByWaiter($id);
+        if ($confirmed) {
+            flash('success', "Pesanan #{$id} Akan Diantar ke Meja #{$find['table_number']}");
+        } else {
+            flash('error', "Error Tak Terduga");
+        }
+    }
+    header('Location: /pelayan');
+    exit();
+
+}
+function finishOrders(string $id): void{
+
+    if (getCsrf()->validate('csrf_token')) {
+
+        $find = getOrderById($id)[0];
+        $confirmed = confirmOrderDoneByWaiter($id);
+        if ($confirmed) {
+            flash('success', "Pesanan #{$id} Telah Selesai");
+        } else {
+            flash('error', "Error Tak Terduga");
+        }
+    }
+    header('Location: /pelayan');
     exit();
 
 }

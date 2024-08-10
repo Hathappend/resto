@@ -38,7 +38,7 @@ function confirmOrderFromCashier(string $id){
 
         $confirmed = confirmOrderByChef($id);
         if ($confirmed) {
-            flash('success', "Berhasil Mengkonfirmasi Pesanan #{$id}");
+            flash('success', "Berhasil, Pesanan #{$id} akan diproses");
         } else {
             flash('error', "Error Tak Terduga");
         }

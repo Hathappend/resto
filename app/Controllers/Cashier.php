@@ -3,15 +3,11 @@
 require __DIR__ . '/../Helpers/view.php';
 require __DIR__ . '/../Helpers/badge.php';
 require __DIR__ . '/../Helpers/date.php';
-require __DIR__ . '/../Models/Menu.php';
-require __DIR__ . '/../Models/User.php';
+//require __DIR__ . '/../Models/User.php';
 require __DIR__ . '/../Models/Order.php';
 require __DIR__ . '/../Models/OrderDetail.php';
 require __DIR__ . '/../Models/Recap.php';
 require __DIR__ . '/../Request/dateRequest.php';
-
-use Dompdf\Dompdf;
-use Dompdf\Options;
 
 function home(): void{
 
@@ -64,6 +60,10 @@ function transactionHistory(): void{
     view("Cashier/pages/transactionHistory", [
         "title" => "Histori Transaksi",
         "orders" => $orders,
+        "dailyRevenue" => getDayOrderSumTrends(),
+        "weeklyRevenue" => getWeekOrderSumTrends(),
+        "monthlyRevenue" => getMonthOrderSumTrends(),
+        "yearlyRevenue" => getYearOrderSumTrends(),
     ]);
 
 }
@@ -153,9 +153,12 @@ function transactionRecap(): void{
 }
 
 function receiptPrint(string $id): void{
+
+    require __DIR__ . '/../Models/Menu.php';
+
     $orders = getOrderById($id);
     $order_details = getOrderDetailByOrderId($id);
-    $cashier = findById($orders[0]['cashier_id']);
+    $cashier = findById($orders[0]['cashier_id'])[0];
 
     require __DIR__ . '/../Views/Cashier/pages/receiptPrint.php';
 

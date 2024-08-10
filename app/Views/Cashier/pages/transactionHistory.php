@@ -12,6 +12,24 @@
     <!--start page wrapper -->
     <div class="page-wrapper">
         <div class="page-content">
+
+            <!--breadcrumb-->
+            <div class="page-content-header d-flex justify-content-between align-items-center">
+                <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
+                    <div class="breadcrumb-title pe-3">U-Resto</div>
+                    <div class="ps-3">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mb-0 p-0">
+                                <li class="breadcrumb-item"><a href="/kasir"><i class="bx bx-home-alt"></i></a>
+                                </li>
+                                <li class="breadcrumb-item" aria-current="page">Histori Transaksi</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+                <!--end breadcrumb-->
+            </div>
+
             <div class="row" >
                 <div class="col-12">
                     <div class="row">
@@ -21,10 +39,10 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0 text-secondary">Pendapatan Hari ini</p>
-                                            <h4 class="my-1">$4805</h4>
-                                            <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p>
+                                            <h5 class="my-1">Rp. <?= number_format($dailyRevenue['total_sum']) ?></h5>
+                                            <p class="mb-0 font-13 <?= showClassTrends($dailyRevenue['trend'])['text'] ?>>"><i class='bx <?= showClassTrends($dailyRevenue['trend'])['icon'] ?> align-middle'></i><?= $dailyRevenue['percentage']?>% 1 Hari terakhir</p>
                                         </div>
-                                        <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
+                                        <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-purchase-tag'></i>
                                         </div>
                                     </div>
                                 </div>
@@ -36,10 +54,10 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0 text-secondary">Pendapatan Minggu Ini</p>
-                                            <h4 class="my-1">8.4K</h4>
-                                            <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>14% Since last week</p>
+                                            <h5 class="my-1">Rp. <?= number_format($weeklyRevenue['total_sum']) ?></h5>
+                                            <p class="mb-0 font-13 <?= showClassTrends($weeklyRevenue['trend'])['text'] ?>>"><i class='bx <?= showClassTrends($weeklyRevenue['trend'])['icon'] ?> align-middle'></i><?= $weeklyRevenue['percentage']?>% 1 Minggu terakhir</p>
                                         </div>
-                                        <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-group'></i>
+                                        <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-purchase-tag'></i>
                                         </div>
                                     </div>
                                 </div>
@@ -51,10 +69,10 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0 text-secondary">Pendapatan Bulan ini</p>
-                                            <h4 class="my-1">59K</h4>
-                                            <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
+                                            <h5 class="my-1">Rp. <?= number_format($monthlyRevenue['total_sum']) ?></h5>
+                                            <p class="mb-0 font-13 <?= showClassTrends($monthlyRevenue['trend'])['text'] ?>>"><i class='bx <?= showClassTrends($monthlyRevenue['trend'])['icon'] ?> align-middle'></i><?= $monthlyRevenue['percentage']?>% 1 Bulan terakhir</p>
                                         </div>
-                                        <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
+                                        <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-purchase-tag'></i>
                                         </div>
                                     </div>
                                 </div>
@@ -66,10 +84,10 @@
                                     <div class="d-flex align-items-center">
                                         <div>
                                             <p class="mb-0 text-secondary">Pendapatan Tahun ini</p>
-                                            <h4 class="my-1">59K</h4>
-                                            <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
+                                            <h5 class="my-1">Rp. <?= number_format($yearlyRevenue['total_sum']) ?></h5>
+                                            <p class="mb-0 font-13 <?= showClassTrends($yearlyRevenue['trend'])['text'] ?>>"><i class='bx <?= showClassTrends($yearlyRevenue['trend'])['icon'] ?> align-middle'></i><?= $yearlyRevenue['percentage']?>% 1 Tahun terakhir</p>
                                         </div>
-                                        <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
+                                        <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-purchase-tag'></i>
                                         </div>
                                     </div>
                                 </div>
@@ -277,16 +295,14 @@
                                                             </div>
                                                             <div class="col-12"><hr></div>
 
-                                                            <?php if ($order['status'] == "selesai") { ?>
-
-                                                            <div class="col-12">
-                                                                <form action="/kasir/cetak/id/<?=$order['id']?>" method="POST" target="_blank">
-                                                                    <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-printer mr-1'></i>Cetak Resi</button>
-                                                                </form>
-                                                            </div>
-
+                                                            <?php if ($order['status'] == "belum bayar" || $order['status'] == "menunggu konfirmasi") { ?>
+                                                                <p><i>* Belum dapat mencetak resi, karena pesanan belum dikonfirmasi Kasir</i></p>
                                                             <?php }else{ ?>
-                                                            <p><i>* Belum dapat mencetak resi, karena pesanan belum selesai</i></p>
+                                                                <div class="col-12">
+                                                                    <form action="/kasir/cetak/id/<?=$order['id']?>" method="POST" target="_blank">
+                                                                        <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-printer mr-1'></i>Cetak Resi</button>
+                                                                    </form>
+                                                                </div>
                                                             <?php } ?>
 
                                                         </div>
@@ -319,101 +335,3 @@
     </footer>
 </div>
 <!--end wrapper-->
-<!--start switcher-->
-<div class="switcher-wrapper">
-    <div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
-    </div>
-    <div class="switcher-body">
-        <div class="d-flex align-items-center">
-            <h5 class="mb-0 text-uppercase">Theme Customizer</h5>
-            <button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Theme Styles</h6>
-        <hr/>
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="lightmode" checked>
-                <label class="form-check-label" for="lightmode">Light</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="darkmode">
-                <label class="form-check-label" for="darkmode">Dark</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="semidark">
-                <label class="form-check-label" for="semidark">Semi Dark</label>
-            </div>
-        </div>
-        <hr/>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="minimaltheme" name="flexRadioDefault">
-            <label class="form-check-label" for="minimaltheme">Minimal Theme</label>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Header Colors</h6>
-        <hr/>
-        <div class="header-colors-indigators">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="indigator headercolor1" id="headercolor1"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor2" id="headercolor2"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor3" id="headercolor3"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor4" id="headercolor4"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor5" id="headercolor5"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor6" id="headercolor6"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor7" id="headercolor7"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor8" id="headercolor8"></div>
-                </div>
-            </div>
-        </div>
-
-        <hr/>
-        <h6 class="mb-0">Sidebar Backgrounds</h6>
-        <hr/>
-        <div class="header-colors-indigators">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="indigator sidebarcolor1" id="sidebarcolor1"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor2" id="sidebarcolor2"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor3" id="sidebarcolor3"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor4" id="sidebarcolor4"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor5" id="sidebarcolor5"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor6" id="sidebarcolor6"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor7" id="sidebarcolor7"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor8" id="sidebarcolor8"></div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-</div>
-<!--end switcher-->

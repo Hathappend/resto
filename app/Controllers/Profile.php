@@ -3,8 +3,6 @@
 require __DIR__ . "/../Helpers/view.php";
 require __DIR__ . "/../Helpers/file.php";
 require __DIR__ . "/../Helpers/image.php";
-require __DIR__ . "/../Helpers/role.php";
-require __DIR__ . "/../Models/User.php";
 require __DIR__ . '/../Request/userRequest.php';
 
 function home(): void

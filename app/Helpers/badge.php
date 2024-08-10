@@ -16,7 +16,11 @@ function showColorClassBadge(string $status, string $useFor): string{
             return "bg-secondary";
         }
 
-        if ($status == "selesai") {
+        if ($status == "dimasak") {
+            return "bg-info";
+        }
+
+        if ($status == "selesai" || $status == 'diantar' || $status == "siap") {
             return "bg-success";
         }
 
@@ -56,7 +60,7 @@ function showClassColorStatus(string $status): array{
         ];
     }
 
-    elseif ($status == 'selesai'){
+    elseif ($status == 'selesai' || $status == 'siap' || $status == 'diantar'){
         return [
             "text" => "text-success",
             "bg"  => "bg-success"

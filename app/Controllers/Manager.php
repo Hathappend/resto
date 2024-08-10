@@ -1,16 +1,15 @@
 <?php
 
 require __DIR__ . "/../Helpers/view.php";
-require __DIR__ . "/../Helpers/role.php";
 require __DIR__ . '/../Helpers/badge.php';
 require __DIR__ . '/../Models/Table.php';
 require __DIR__ . '/../Models/Reservation.php';
 require __DIR__ . '/../Models/Menu.php';
 require __DIR__ . '/../Models/Order.php';
 require __DIR__ . '/../Models/OrderDetail.php';
-require __DIR__ . "/../Models/User.php";
 require __DIR__ . "/../Models/Recap.php";
 require __DIR__ . "/../Models/Category.php";
+//require __DIR__ . "/../Models/User.php";?
 require __DIR__ . "/../Request/userRequest.php";
 
 function home(): void
@@ -45,6 +44,7 @@ function orderInfo(): void
         "allTodayOrders" => getTodayOrders(),
         "newOrderTrends" => getOrderTrends(),
         "dayOrderTrends" => getDayOrderTrends(),
+        "todayOrdersReadyAndDelivery" => getTodayOrdersReadyAndDelivery()
 
     ]);
 }
@@ -123,11 +123,13 @@ function addUsers(): void
 
             $saved = save($request);
 
+            $request['role_name'] = getRole($request['roles_mask']);
+
             if ($saved) {
                 sendEmail(
                     toEmail: $request['email'] ,
                     useFor: "info",
-                    data: $request);
+                    user: $request);
 
                 flash('success', 'Karyawan baru berhasil di tambahkan');
             }else{
@@ -169,11 +171,13 @@ function editUsers(): void
 
             $saved = updateInfo($request);
 
+            $request['role_name'] = getRole($request['roles_mask']);
+
             if ($saved) {
                 sendEmail(
                     toEmail: $request['email'] ,
                     useFor: "info",
-                    data: $request);
+                    user: $request);
 
                 flash('success', 'Data Karyawan berhasil di edit');
             }else{

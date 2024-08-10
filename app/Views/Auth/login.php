@@ -63,8 +63,8 @@
 
                                                 <input type="password" class="form-control <?= (getFlash('errors')['password'] ?? '') ? 'is-invalid' : '' ?>" name="password" id="inputChoosePassword" placeholder="Enter Password">
 
-                                                <?php if (getFlash('errors')) { ?>
-                                                    <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['password'] ?></div>
+                                                <?php if (getFlash('errors')['password'] ?? '') { ?>
+                                                    <div class="invalid-message p-1 text-danger"><?= getFlash('errors')['password'] ?? '' ?></div>
                                                 <?php } ?>
                                                 <?php clearFlash('errors'); ?>
 

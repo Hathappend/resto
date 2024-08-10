@@ -14,7 +14,7 @@
         <div class="page-content">
             <!--breadcrumb-->
             <div class="page-breadcrumb d-none d-sm-flex align-items-center mb-3">
-                <div class="breadcrumb-title pe-3">eCommerce</div>
+                <div class="breadcrumb-title pe-3">U-Resto</div>
                 <div class="ps-3">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb mb-0 p-0">
@@ -25,12 +25,41 @@
                     </nav>
                 </div>
                 <div class="ms-auto">
-
-                        <a href="/buat-pesanan" class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Buat Pesanan</a>
-
+                    <a href="/buat-pesanan" class="btn btn-primary radius-30 mt-2 mt-lg-0"><i class="bx bxs-plus-square"></i>Buat Pesanan</a>
                 </div>
             </div>
             <!--end breadcrumb-->
+
+            <?php if (getFlash('error')){ ?>
+                <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Danger</h6>
+                            <div class="text-white"><?=getFlash('error'); ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('error'); ?>
+            <?php } ?>
+
+            <?php if (getFlash('success')){ ?>
+                <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Success</h6>
+                            <div class="text-white"><?= getFlash('success') ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('success'); ?>
+            <?php } ?>
+
 
             <div class="card">
                 <div class="card-body">
@@ -180,6 +209,27 @@
                                                                 <p class="mb-0 pay-info-value pt-1"><?=$order['note']?></p>
                                                             </div>
                                                             <div class="col-12"><hr></div>
+                                                            <div class="col-12">
+
+
+                                                                    <?php if ($order['status'] == "siap") { ?>
+
+                                                                        <form action="/pelayan/delivery/id/<?=$order['id']?>" method="POST" >
+                                                                            <?=getCsrf()->input('csrf_token');?>
+                                                                            <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-paper-plane mr-1'></i>Antar Pesanan Sekarang</button>
+                                                                        </form>
+
+                                                                    <?php }elseif($order['status'] == "diantar"){ ?>
+
+                                                                        <form action="/pelayan/selesai/id/<?=$order['id']?>" method="POST" >
+                                                                            <?=getCsrf()->input('csrf_token');?>
+                                                                            <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-check-double mr-1'></i>Pesanan Selesai</button>
+                                                                        </form>
+
+                                                                    <?php } ?>
+
+
+                                                            </div>
                                                         </div>
 
                                                     </div>
@@ -211,99 +261,3 @@
     </footer>
 </div>
 <!--end wrapper-->
-<!--start switcher-->
-<div class="switcher-wrapper">
-    <div class="switcher-btn"> <i class='bx bx-cog bx-spin'></i>
-    </div>
-    <div class="switcher-body">
-        <div class="d-flex align-items-center">
-            <h5 class="mb-0 text-uppercase">Theme Customizer</h5>
-            <button type="button" class="btn-close ms-auto close-switcher" aria-label="Close"></button>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Theme Styles</h6>
-        <hr/>
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="lightmode" checked>
-                <label class="form-check-label" for="lightmode">Light</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="darkmode">
-                <label class="form-check-label" for="darkmode">Dark</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="flexRadioDefault" id="semidark">
-                <label class="form-check-label" for="semidark">Semi Dark</label>
-            </div>
-        </div>
-        <hr/>
-        <div class="form-check">
-            <input class="form-check-input" type="radio" id="minimaltheme" name="flexRadioDefault">
-            <label class="form-check-label" for="minimaltheme">Minimal Theme</label>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Header Colors</h6>
-        <hr/>
-        <div class="header-colors-indigators">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="indigator headercolor1" id="headercolor1"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor2" id="headercolor2"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor3" id="headercolor3"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor4" id="headercolor4"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor5" id="headercolor5"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor6" id="headercolor6"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor7" id="headercolor7"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator headercolor8" id="headercolor8"></div>
-                </div>
-            </div>
-        </div>
-        <hr/>
-        <h6 class="mb-0">Sidebar Colors</h6>
-        <hr/>
-        <div class="header-colors-indigators">
-            <div class="row row-cols-auto g-3">
-                <div class="col">
-                    <div class="indigator sidebarcolor1" id="sidebarcolor1"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor2" id="sidebarcolor2"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor3" id="sidebarcolor3"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor4" id="sidebarcolor4"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor5" id="sidebarcolor5"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor6" id="sidebarcolor6"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor7" id="sidebarcolor7"></div>
-                </div>
-                <div class="col">
-                    <div class="indigator sidebarcolor8" id="sidebarcolor8"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!--end switcher-->

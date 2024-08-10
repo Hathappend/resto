@@ -42,6 +42,13 @@ function findById(?string $id): array{
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function findUserByEmail(?string $email): array{
+    $stmt = getConnection()->prepare("SELECT first_name, last_name, email, roles_mask FROM users WHERE email = ?");
+    $stmt->execute([$email]);
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function update(array $value, ?string $imgName): bool{
 
     $conn = getConnection();

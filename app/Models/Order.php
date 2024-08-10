@@ -96,6 +96,56 @@ function confirmOrderDoneByChef(string $id): bool{
 
         $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
         $stmt->execute([
+            "siap",
+            $id
+        ]);
+
+        $conn->commit();
+
+        return true;
+    } catch (PDOException $e) {
+        $conn->rollBack();
+
+        return false;
+    }
+
+}
+
+function confirmOrderDeliveryByWaiter(string $id): bool{
+
+    $conn = getConnection();
+
+    try {
+
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->execute([
+            "diantar",
+            $id
+        ]);
+
+        $conn->commit();
+
+        return true;
+    } catch (PDOException $e) {
+        $conn->rollBack();
+
+        return false;
+    }
+
+}
+
+function confirmOrderDoneByWaiter(string $id): bool{
+
+    $conn = getConnection();
+
+    try {
+
+        $conn->beginTransaction();
+
+        $stmt = $conn->prepare("UPDATE orders SET status = ? WHERE id = ?");
+        $stmt->execute([
             "selesai",
             $id
         ]);
@@ -125,9 +175,12 @@ function getOrderById(string $id): array{
         o.total, 
         o.note,
         o.created_at,
-        o.cashier_id
+        o.cashier_id,
+        u.first_name,
+        u.last_name
     FROM orders as o 
-    JOIN reservations as r ON r.id = o.reservation_id                                                                         
+    JOIN reservations as r ON r.id = o.reservation_id  
+    JOIN users as u ON r.waiter_id = u.id
     WHERE o.id =? ");
     $stmt->execute([$id]);
 
@@ -318,6 +371,34 @@ function getTodayOrdersProcessingByChef(): array {
     JOIN reservations AS r ON o.reservation_id = r.id
     WHERE DATE(o.created_at) = CURDATE() AND o.status = 'dimasak'
     ORDER BY o.queue_number ASC
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getTodayOrdersReadyAndDelivery(): array {
+    $stmt = getConnection()->prepare("
+        SELECT 
+            o.id, 
+            o.reservation_id, 
+            o.status, 
+            o.queue_number, 
+            o.sub_total, 
+            o.total, 
+            o.note, 
+            o.created_at, 
+            r.table_number 
+        FROM orders AS o 
+        JOIN reservations AS r ON o.reservation_id = r.id
+        WHERE DATE(o.created_at) = CURDATE() 
+          AND (o.status = 'siap' OR o.status = 'diantar')
+        ORDER BY 
+            CASE 
+                WHEN o.status = 'siap' THEN 1 
+                WHEN o.status = 'diantar' THEN 2 
+                ELSE 3 
+            END ASC
     ");
     $stmt->execute();
 

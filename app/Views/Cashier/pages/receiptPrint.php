@@ -67,7 +67,7 @@
                 </tr>
                 <tr>
                     <td>Kasir</td>
-                    <td align="right"> <?= $cashier[0]['first_name'] .' '. $cashier[0]['last_name'] ?></td>
+                    <td align="right"> <?= $cashier['first_name'] .' '. $cashier['last_name'] ?></td>
                 </tr>
                 <tr>
                     <td colspan="2"><hr></td>

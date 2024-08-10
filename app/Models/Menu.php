@@ -128,3 +128,21 @@ function getSafeStock(): array {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 }
+
+function searchMenu($searchTerm): array {
+    $searchTerm = '%' . $searchTerm . '%';
+    $stmt = getConnection()->prepare("
+    SELECT 
+        m.*, 
+        c.category 
+    FROM menus AS m 
+    JOIN menu_categories AS c ON c.id = m.category_id 
+    WHERE 
+        m.menu LIKE ? 
+        OR m.description LIKE ? 
+        OR c.category LIKE ?
+    ");
+    $stmt->execute([$searchTerm, $searchTerm, $searchTerm]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}

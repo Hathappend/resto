@@ -9,6 +9,7 @@ require __DIR__ . '/../app/Helpers/redirect.php';
 require __DIR__ . '/../app/Helpers/session.php';
 require __DIR__ . '/../app/Helpers/mail.php';
 require __DIR__ . '/../app/Helpers/trends.php';
+require __DIR__ . '/../app/Helpers/role.php';
 require __DIR__ . '/../routes/web.php';
 
 //unset($_SESSION['previous_url']);

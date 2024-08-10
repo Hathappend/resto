@@ -42,7 +42,6 @@
                                         <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-group'></i>
                                         </div>
                                     </div>
-                                    <div id="chart2"></div>
                                 </div>
                             </div>
                         </div>
@@ -58,7 +57,6 @@
                                         <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
                                         </div>
                                     </div>
-                                    <div id="chart3"></div>
                                 </div>
                             </div>
                         </div>
@@ -74,39 +72,6 @@
                                         <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
                                         </div>
                                     </div>
-                                    <div id="chart3"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                            <div class="card radius-10">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-0 text-secondary">Pendapatan Tahun ini</p>
-                                            <h4 class="my-1">59K</h4>
-                                            <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
-                                        </div>
-                                        <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
-                                        </div>
-                                    </div>
-                                    <div id="chart3"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                            <div class="card radius-10">
-                                <div class="card-body">
-                                    <div class="d-flex align-items-center">
-                                        <div>
-                                            <p class="mb-0 text-secondary">Pendapatan Tahun ini</p>
-                                            <h4 class="my-1">59K</h4>
-                                            <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
-                                        </div>
-                                        <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
-                                        </div>
-                                    </div>
-                                    <div id="chart3"></div>
                                 </div>
                             </div>
                         </div>
@@ -114,6 +79,37 @@
                 </div>
             </div>
             <!--end row-->
+
+            <?php if (getFlash('error')){ ?>
+                <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Danger</h6>
+                            <div class="text-white"><?=getFlash('error'); ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('error'); ?>
+            <?php } ?>
+
+            <?php if (getFlash('success')){ ?>
+                <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Success</h6>
+                            <div class="text-white"><?= getFlash('success') ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('success'); ?>
+            <?php } ?>
+
 
             <div class="card">
                 <div class="card-body">
@@ -126,17 +122,20 @@
                             </div>
                         </div>
                         <div class="col-12 col-sm-12 col-md-8 col-lg-8 col-xl-8 ">
-                            <div class="row d-flex align-items-center">
-                                <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3 ">
-                                    <input type="text" class="form-control datepicker" placeholder="Tanggal Awal"/>
+                            <form action="/histori-transaksi" method="GET">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3 ">
+                                        <input type="date" name="start_date" class="form-control" placeholder="Tanggal Awal" required/>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3">
+                                        <input type="date" name="end_date" class="form-control" placeholder="Tanggal Akhir" required/>
+                                    </div>
+                                    <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-3">
+                                        <button type="submit" class="btn btn-primary float-end m-1">Filter</button>
+                                        <a href="/histori-transaksi" class="btn btn-danger float-end m-1">Reset</a>
+                                    </div>
                                 </div>
-                                <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3">
-                                    <input type="text" class="form-control datepicker" placeholder="Tanggal Akhir"/>
-                                </div>
-                                <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-3">
-                                    <button type="button" class="btn btn-primary float-end">Filter</button>
-                                </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
 
@@ -281,7 +280,9 @@
                                                             <?php if ($order['status'] == "selesai") { ?>
 
                                                             <div class="col-12">
-                                                                <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-printer mr-1'></i>Cetak Resi</button>
+                                                                <form action="/kasir/cetak/id/<?=$order['id']?>" method="POST" target="_blank">
+                                                                    <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-printer mr-1'></i>Cetak Resi</button>
+                                                                </form>
                                                             </div>
 
                                                             <?php }else{ ?>

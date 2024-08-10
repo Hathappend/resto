@@ -13,6 +13,37 @@
         <!--start page wrapper -->
         <div class="page-wrapper">
             <div class="page-content">
+
+                <?php if (getFlash('error')){ ?>
+                    <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                        <div class="d-flex align-items-center">
+                            <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0 text-white">Danger</h6>
+                                <div class="text-white"><?=getFlash('error'); ?></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php clearFlash('error'); ?>
+                <?php } ?>
+
+                <?php if (getFlash('success')){ ?>
+                    <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                        <div class="d-flex align-items-center">
+                            <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                            </div>
+                            <div class="ms-3">
+                                <h6 class="mb-0 text-white">Success</h6>
+                                <div class="text-white"><?= getFlash('success') ?></div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <?php clearFlash('success'); ?>
+                <?php } ?>
+
                 <div class="row" >
                     <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
                         <div class="row">

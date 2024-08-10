@@ -39,9 +39,21 @@ function order(): void{
 
 function makeOrder(): void{
 
+    $searchQuery = $_GET['search'] ?? "";
+
+    if ($searchQuery) {
+        $result = searchMenu($searchQuery);
+
+        if (empty($result)) {
+            flash('errorSearch', "Ooopss, yang kamu cari tidak ada");
+        }
+    } else {
+        $result = getAllMenu();
+    }
+
     view("Waiter/pages/makeOrder", [
         "title" => "Buat Pesanan",
-        "menus" => getAllMenu()
+        "menus" => $result ?? null
     ]);
 
 }

@@ -12,6 +12,37 @@
     <!--start page wrapper -->
     <div class="page-wrapper">
         <div class="page-content">
+
+            <?php if (getFlash('error')){ ?>
+                <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Danger</h6>
+                            <div class="text-white"><?=getFlash('error'); ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('error'); ?>
+            <?php } ?>
+
+            <?php if (getFlash('success')){ ?>
+                <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Success</h6>
+                            <div class="text-white"><?= getFlash('success') ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('success'); ?>
+            <?php } ?>
+
             <div class="row">
                 <div class="col">
                     <div class="card">
@@ -23,33 +54,35 @@
                                             <h6 class="mb-0 text-uppercase">Rekapitulasi Penjualan</h6>
                                         </div>
                                     </div>
-                                    <div class="row d-flex align-items-center">
-                                        <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3 ">
-                                            <select id="recap-type" class="form-select" aria-label="Default select example" onchange="showElementBySelect('pick-date', 'recap-type')">
-                                                <option selected>Tipe Rekapitulasi:</option>
-                                                <option value="day">Harian</option>
-                                                <option value="week">Mingguan</option>
-                                                <option value="month">Bulanan</option>
-                                                <option value="year">Tahunan</option>
-                                            </select>
+                                    <form action="/rekapitulasi" method="GET">
+                                        <div class="row d-flex align-items-center">
+                                            <div class="col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3 ">
+                                                <select id="recap-type" name="recapType" class="form-select" aria-label="Default select example" onchange="showElementBySelect('pick-date', 'recap-type')">
+                                                    <option selected>Tipe Rekapitulasi:</option>
+                                                    <option value="day">Harian</option>
+                                                    <option value="week">Mingguan</option>
+                                                    <option value="month">Bulanan</option>
+                                                    <option value="year">Tahunan</option>
+                                                </select>
+                                            </div>
+                                            <div id="day" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
+                                                <input type="date" name="dayValue" class="form-control" placeholder="Pilih Tanggal"/>
+                                            </div>
+                                            <div id="week" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
+                                                <input type="week" name="weekValue" class="form-control" placeholder="Pilih Minggu">
+                                            </div>
+                                            <div id="month" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
+                                                <input type="month" name="monthValue" class="form-control" placeholder="Pilih Bulan">
+                                            </div>
+                                            <div id="year" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
+                                                <select id="year-option" name="yearValue" class="form-select" aria-label="Default select example">
+                                                </select>
+                                            </div>
+                                            <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-3">
+                                                <button type="submit" class="btn btn-primary w-100 float-end">Filter</button>
+                                            </div>
                                         </div>
-                                        <div id="day" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
-                                            <input type="text" class="form-control datepicker" placeholder="Pilih Tanggal"/>
-                                        </div>
-                                        <div id="week" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
-                                            <input type="week" class="form-control" placeholder="Pilih Minggu">
-                                        </div>
-                                        <div id="month" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
-                                            <input type="month" class="form-control" placeholder="Pilih Bulan">
-                                        </div>
-                                        <div id="year" class="pick-date col-12 col-sm-12 col-md-5 col-lg-5 col-xl-5 mb-3" style="display: none">
-                                            <select id="year-option" class="form-select" aria-label="Default select example">
-                                            </select>
-                                        </div>
-                                        <div class="col-12 col-sm-12 col-md-2 col-lg-2 col-xl-2 mb-3">
-                                            <button type="button" class="btn btn-primary w-100 float-end">Filter</button>
-                                        </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -62,487 +95,187 @@
                 <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h6 class="mb-0 text-uppercase">Overview</h6>
+                            <div class="header-everview d-flex justify-content-between">
+                                <div class="header-left">
+                                    <h6 class="mb-0 text-uppercase">Overview</h6>
+                                    <p class="mb-0 py-1"><?= $filterValue?></p>
+                                </div>
+                                <div class="header-right">
+                                    <?php if (!empty($orders)) {?>
+                                        <form action="/rekapitulasi" method="POST" >
+                                            <?=getCsrf()->input('csrf_token');?>
+                                            <button type="submit" class="btn btn-primary"><i class='bx bx-navigation mr-1'></i>Rekap Sekarang</button>
+                                        </form>
+                                    <?php } ?>
+                                </div>
+
+                            </div>
                             <hr>
                             <div class="table-responsive">
                                 <table id="example" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
+                                        <th>No Pesanan</th>
+                                        <th>No Meja</th>
+                                        <th>status</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Sub Total</th>
+                                        <th>Total</th>
+                                        <th>Dibuat Pada</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>Tiger Nixon</td>
-                                        <td>System Architect</td>
-                                        <td>Edinburgh</td>
-                                        <td>61</td>
-                                        <td>2011/04/25</td>
-                                        <td>$320,800</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Garrett Winters</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>63</td>
-                                        <td>2011/07/25</td>
-                                        <td>$170,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Ashton Cox</td>
-                                        <td>Junior Technical Author</td>
-                                        <td>San Francisco</td>
-                                        <td>66</td>
-                                        <td>2009/01/12</td>
-                                        <td>$86,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cedric Kelly</td>
-                                        <td>Senior Javascript Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>22</td>
-                                        <td>2012/03/29</td>
-                                        <td>$433,060</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Brielle Williamson</td>
-                                        <td>Integration Specialist</td>
-                                        <td>New York</td>
-                                        <td>61</td>
-                                        <td>2012/12/02</td>
-                                        <td>$372,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Herrod Chandler</td>
-                                        <td>Sales Assistant</td>
-                                        <td>San Francisco</td>
-                                        <td>59</td>
-                                        <td>2012/08/06</td>
-                                        <td>$137,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Rhona Davidson</td>
-                                        <td>Integration Specialist</td>
-                                        <td>Tokyo</td>
-                                        <td>55</td>
-                                        <td>2010/10/14</td>
-                                        <td>$327,900</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Colleen Hurst</td>
-                                        <td>Javascript Developer</td>
-                                        <td>San Francisco</td>
-                                        <td>39</td>
-                                        <td>2009/09/15</td>
-                                        <td>$205,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sonya Frost</td>
-                                        <td>Software Engineer</td>
-                                        <td>Edinburgh</td>
-                                        <td>23</td>
-                                        <td>2008/12/13</td>
-                                        <td>$103,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jena Gaines</td>
-                                        <td>Office Manager</td>
-                                        <td>London</td>
-                                        <td>30</td>
-                                        <td>2008/12/19</td>
-                                        <td>$90,560</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Quinn Flynn</td>
-                                        <td>Support Lead</td>
-                                        <td>Edinburgh</td>
-                                        <td>22</td>
-                                        <td>2013/03/03</td>
-                                        <td>$342,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Charde Marshall</td>
-                                        <td>Regional Director</td>
-                                        <td>San Francisco</td>
-                                        <td>36</td>
-                                        <td>2008/10/16</td>
-                                        <td>$470,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Haley Kennedy</td>
-                                        <td>Senior Marketing Designer</td>
-                                        <td>London</td>
-                                        <td>43</td>
-                                        <td>2012/12/18</td>
-                                        <td>$313,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tatyana Fitzpatrick</td>
-                                        <td>Regional Director</td>
-                                        <td>London</td>
-                                        <td>19</td>
-                                        <td>2010/03/17</td>
-                                        <td>$385,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michael Silva</td>
-                                        <td>Marketing Designer</td>
-                                        <td>London</td>
-                                        <td>66</td>
-                                        <td>2012/11/27</td>
-                                        <td>$198,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Paul Byrd</td>
-                                        <td>Chief Financial Officer (CFO)</td>
-                                        <td>New York</td>
-                                        <td>64</td>
-                                        <td>2010/06/09</td>
-                                        <td>$725,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gloria Little</td>
-                                        <td>Systems Administrator</td>
-                                        <td>New York</td>
-                                        <td>59</td>
-                                        <td>2009/04/10</td>
-                                        <td>$237,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Bradley Greer</td>
-                                        <td>Software Engineer</td>
-                                        <td>London</td>
-                                        <td>41</td>
-                                        <td>2012/10/13</td>
-                                        <td>$132,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dai Rios</td>
-                                        <td>Personnel Lead</td>
-                                        <td>Edinburgh</td>
-                                        <td>35</td>
-                                        <td>2012/09/26</td>
-                                        <td>$217,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jenette Caldwell</td>
-                                        <td>Development Lead</td>
-                                        <td>New York</td>
-                                        <td>30</td>
-                                        <td>2011/09/03</td>
-                                        <td>$345,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Yuri Berry</td>
-                                        <td>Chief Marketing Officer (CMO)</td>
-                                        <td>New York</td>
-                                        <td>40</td>
-                                        <td>2009/06/25</td>
-                                        <td>$675,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Caesar Vance</td>
-                                        <td>Pre-Sales Support</td>
-                                        <td>New York</td>
-                                        <td>21</td>
-                                        <td>2011/12/12</td>
-                                        <td>$106,450</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Doris Wilder</td>
-                                        <td>Sales Assistant</td>
-                                        <td>Sydney</td>
-                                        <td>23</td>
-                                        <td>2010/09/20</td>
-                                        <td>$85,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Angelica Ramos</td>
-                                        <td>Chief Executive Officer (CEO)</td>
-                                        <td>London</td>
-                                        <td>47</td>
-                                        <td>2009/10/09</td>
-                                        <td>$1,200,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gavin Joyce</td>
-                                        <td>Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>42</td>
-                                        <td>2010/12/22</td>
-                                        <td>$92,575</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jennifer Chang</td>
-                                        <td>Regional Director</td>
-                                        <td>Singapore</td>
-                                        <td>28</td>
-                                        <td>2010/11/14</td>
-                                        <td>$357,650</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Brenden Wagner</td>
-                                        <td>Software Engineer</td>
-                                        <td>San Francisco</td>
-                                        <td>28</td>
-                                        <td>2011/06/07</td>
-                                        <td>$206,850</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fiona Green</td>
-                                        <td>Chief Operating Officer (COO)</td>
-                                        <td>San Francisco</td>
-                                        <td>48</td>
-                                        <td>2010/03/11</td>
-                                        <td>$850,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shou Itou</td>
-                                        <td>Regional Marketing</td>
-                                        <td>Tokyo</td>
-                                        <td>20</td>
-                                        <td>2011/08/14</td>
-                                        <td>$163,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michelle House</td>
-                                        <td>Integration Specialist</td>
-                                        <td>Sydney</td>
-                                        <td>37</td>
-                                        <td>2011/06/02</td>
-                                        <td>$95,400</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Suki Burks</td>
-                                        <td>Developer</td>
-                                        <td>London</td>
-                                        <td>53</td>
-                                        <td>2009/10/22</td>
-                                        <td>$114,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Prescott Bartlett</td>
-                                        <td>Technical Author</td>
-                                        <td>London</td>
-                                        <td>27</td>
-                                        <td>2011/05/07</td>
-                                        <td>$145,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gavin Cortez</td>
-                                        <td>Team Leader</td>
-                                        <td>San Francisco</td>
-                                        <td>22</td>
-                                        <td>2008/10/26</td>
-                                        <td>$235,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Martena Mccray</td>
-                                        <td>Post-Sales support</td>
-                                        <td>Edinburgh</td>
-                                        <td>46</td>
-                                        <td>2011/03/09</td>
-                                        <td>$324,050</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Unity Butler</td>
-                                        <td>Marketing Designer</td>
-                                        <td>San Francisco</td>
-                                        <td>47</td>
-                                        <td>2009/12/09</td>
-                                        <td>$85,675</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Howard Hatfield</td>
-                                        <td>Office Manager</td>
-                                        <td>San Francisco</td>
-                                        <td>51</td>
-                                        <td>2008/12/16</td>
-                                        <td>$164,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hope Fuentes</td>
-                                        <td>Secretary</td>
-                                        <td>San Francisco</td>
-                                        <td>41</td>
-                                        <td>2010/02/12</td>
-                                        <td>$109,850</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Vivian Harrell</td>
-                                        <td>Financial Controller</td>
-                                        <td>San Francisco</td>
-                                        <td>62</td>
-                                        <td>2009/02/14</td>
-                                        <td>$452,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Timothy Mooney</td>
-                                        <td>Office Manager</td>
-                                        <td>London</td>
-                                        <td>37</td>
-                                        <td>2008/12/11</td>
-                                        <td>$136,200</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jackson Bradshaw</td>
-                                        <td>Director</td>
-                                        <td>New York</td>
-                                        <td>65</td>
-                                        <td>2008/09/26</td>
-                                        <td>$645,750</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Olivia Liang</td>
-                                        <td>Support Engineer</td>
-                                        <td>Singapore</td>
-                                        <td>64</td>
-                                        <td>2011/02/03</td>
-                                        <td>$234,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Bruno Nash</td>
-                                        <td>Software Engineer</td>
-                                        <td>London</td>
-                                        <td>38</td>
-                                        <td>2011/05/03</td>
-                                        <td>$163,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Sakura Yamamoto</td>
-                                        <td>Support Engineer</td>
-                                        <td>Tokyo</td>
-                                        <td>37</td>
-                                        <td>2009/08/19</td>
-                                        <td>$139,575</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Thor Walton</td>
-                                        <td>Developer</td>
-                                        <td>New York</td>
-                                        <td>61</td>
-                                        <td>2013/08/11</td>
-                                        <td>$98,540</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Finn Camacho</td>
-                                        <td>Support Engineer</td>
-                                        <td>San Francisco</td>
-                                        <td>47</td>
-                                        <td>2009/07/07</td>
-                                        <td>$87,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Serge Baldwin</td>
-                                        <td>Data Coordinator</td>
-                                        <td>Singapore</td>
-                                        <td>64</td>
-                                        <td>2012/04/09</td>
-                                        <td>$138,575</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Zenaida Frank</td>
-                                        <td>Software Engineer</td>
-                                        <td>New York</td>
-                                        <td>63</td>
-                                        <td>2010/01/04</td>
-                                        <td>$125,250</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Zorita Serrano</td>
-                                        <td>Software Engineer</td>
-                                        <td>San Francisco</td>
-                                        <td>56</td>
-                                        <td>2012/06/01</td>
-                                        <td>$115,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jennifer Acosta</td>
-                                        <td>Junior Javascript Developer</td>
-                                        <td>Edinburgh</td>
-                                        <td>43</td>
-                                        <td>2013/02/01</td>
-                                        <td>$75,650</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Cara Stevens</td>
-                                        <td>Sales Assistant</td>
-                                        <td>New York</td>
-                                        <td>46</td>
-                                        <td>2011/12/06</td>
-                                        <td>$145,600</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Hermione Butler</td>
-                                        <td>Regional Director</td>
-                                        <td>London</td>
-                                        <td>47</td>
-                                        <td>2011/03/21</td>
-                                        <td>$356,250</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Lael Greer</td>
-                                        <td>Systems Administrator</td>
-                                        <td>London</td>
-                                        <td>21</td>
-                                        <td>2009/02/27</td>
-                                        <td>$103,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jonas Alexander</td>
-                                        <td>Developer</td>
-                                        <td>San Francisco</td>
-                                        <td>30</td>
-                                        <td>2010/07/14</td>
-                                        <td>$86,500</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Shad Decker</td>
-                                        <td>Regional Director</td>
-                                        <td>Edinburgh</td>
-                                        <td>51</td>
-                                        <td>2008/11/13</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Michael Bruce</td>
-                                        <td>Javascript Developer</td>
-                                        <td>Singapore</td>
-                                        <td>29</td>
-                                        <td>2011/06/27</td>
-                                        <td>$183,000</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Donna Snider</td>
-                                        <td>Customer Support</td>
-                                        <td>New York</td>
-                                        <td>27</td>
-                                        <td>2011/01/25</td>
-                                        <td>$112,000</td>
-                                    </tr>
-                                    </tbody>
-                                    <tfoot>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Position</th>
-                                        <th>Office</th>
-                                        <th>Age</th>
-                                        <th>Start date</th>
-                                        <th>Salary</th>
-                                    </tr>
+
+                                    <?php if (!empty($orders)) { ?>
+
+
+                                        <?php foreach ($orders as $order) { ?>
+                                            <?php
+                                                $cashier = findById($order['cashier_id'])[0] ?? null;
+                                            ?>
+
+                                            <tr>
+                                                <td><?= $order['id'] ?></td>
+                                                <td><?= $order['table_number'] ?></td>
+                                                <?php $user = findById($order['cashier_id'] ?? '');?>
+                                                <td><div class="badge rounded-pill <?=showColorClassBadge($order['status'], 'pelayan')?> p-2 text-uppercase px-3"><i class='bx bxs-circle me-1'></i><?= $order['status'] ?></div></td>
+                                                <td><?= ($cashier['first_name'] ?? '') .' '. ($cashier['last_name'] ?? '') ?></td>
+                                                <td>Rp. <?= number_format($order['sub_total']) ?></td>
+                                                <td>Rp. <?= number_format($order['total']) ?></td>
+                                                <td><?= date('d-m-Y', strtotime($order['created_at'])) ?></td>
+                                                <td align="center">
+                                                    <button type="button" class="btn bg-transparent list-inline-item btn-sm d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#modalInfoTrans<?=$order['id']?>"><i class="bx bx-info-circle"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="modalInfoTrans<?=$order['id']?>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-xl">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Info Pesanan</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="row d-flex align-items-center">
+                                                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <div class="product-list p-3 mb-3">
+
+                                                                                <?php foreach (getOrderDetailByOrderId($order['id']) as $order_detail) { ?>
+
+                                                                                    <div class="row border mx-0 mb-3 py-2 radius-10 cursor-pointer">
+                                                                                        <div class="col-sm-12">
+                                                                                            <div class="d-flex align-items-center">
+                                                                                                <div style="width:80px;height:80px;">
+                                                                                                    <img src="/uploads/menus/<?=$order_detail['image'] ?>" class="p-1 img-fluid" alt="" />
+                                                                                                </div>
+                                                                                                <div class="ms-2">
+                                                                                                    <h6 class="mb-1 card-title menu-title"><?=$order_detail['menu'] ?></h6>
+                                                                                                    <p class="price-label mb-0 fw-bold pt-1"><span>Rp. <?=$order_detail['price'] ?></span></p>
+                                                                                                    <p class="quantity-label mb-0 pt-1"><span>Qty: <?=$order_detail['qty'] ?></span></p>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+
+                                                                                <?php } ?>
+
+
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-12 col-sm-12 col-md-6 col-lg-6">
+                                                                    <div class="row d-flex align-items-center p-3">
+                                                                        <div class="col-12">
+                                                                            <h6 class="mb-0 title-pay-info">Meja #<?=$order['table_number']?></h6>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <p class="mb-0 pay-info-value pt-1">Pesanan #<?=$order['id']?></p>
+                                                                        </div>
+                                                                        <div class="col-12"><hr></div>
+                                                                        <div class="col-12">
+                                                                            <h6 class="mb-0 title-pay-info">Sub Total</h6>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p class="mb-0 mt-3 pay-info-value">Total Item</p>
+                                                                        </div>
+                                                                        <div class="col-6 text-end">
+                                                                            <p class="mb-0 mt-3 pay-info-value">Rp. <?=number_format($order['sub_total'])?></p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p class="mb-0 mt-1 pay-info-value">Pajak</p>
+                                                                        </div>
+                                                                        <div class="col-6 text-end">
+                                                                            <p class="mb-0 mt-1 pay-info-value">10%</p>
+                                                                        </div>
+                                                                        <div class="col-12"><hr></div>
+                                                                        <div class="col-6">
+                                                                            <h6 class="mb-0 title-pay-info">Total</h6>
+                                                                        </div>
+                                                                        <div class="col-6 text-end">
+                                                                            <h6 class="mb-0 title-pay-info">Rp. <?=number_format($order['total'])?></h6>
+                                                                        </div>
+                                                                        <div class="col-12"><hr></div>
+                                                                        <div class="col-12">
+                                                                            <h6 class="mb-0 title-pay-info">Detail</h6>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p class="mb-0 mt-3 pay-info-value">Status</p>
+                                                                        </div>
+                                                                        <div class="col-6 text-end">
+                                                                            <p class="mb-0 mt-3 pay-info-value"><span class="badge <?=showColorClassBadge($order['status'], 'pelayan')?>"><?=$order['status']?></span></p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p class="mb-0 mt-1 pay-info-value">Nomor Antrian</p>
+                                                                        </div>
+                                                                        <div class="col-6 text-end">
+                                                                            <p class="mb-0 mt-1 pay-info-value"><?=$order['queue_number']?></p>
+                                                                        </div>
+                                                                        <div class="col-6">
+                                                                            <p class="mb-0 mt-1 pay-info-value">Pesanan Dibuat Pada</p>
+                                                                        </div>
+                                                                        <div class="col-6 text-end">
+                                                                            <p class="mb-0 mt-1 pay-info-value"><?=date('d/m/Y', strtotime($order['created_at']))?></p>
+                                                                        </div>
+                                                                        <div class="col-12"><hr></div>
+                                                                        <div class="col-12">
+                                                                            <h6 class="mb-0 title-pay-info">Note</h6>
+                                                                        </div>
+                                                                        <div class="col-12">
+                                                                            <p class="mb-0 pay-info-value pt-1"><?=$order['note']?></p>
+                                                                        </div>
+                                                                        <div class="col-12"><hr></div>
+
+                                                                        <?php if ($order['status'] == "selesai") { ?>
+
+                                                                            <div class="col-12">
+                                                                                <button type="submit" class="btn btn-primary px-5 w-100"><i class='bx bx-printer mr-1'></i>Cetak Resi</button>
+                                                                            </div>
+
+                                                                        <?php }else{ ?>
+                                                                            <p><i>* Belum dapat mencetak resi, karena pesanan belum selesai</i></p>
+                                                                        <?php } ?>
+
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <?php } ?>
+
+
+                                    <?php  } ?>
+
+
                                     </tfoot>
                                 </table>
                             </div>
@@ -563,232 +296,32 @@
                                 <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
                             <div class="table-responsive mt-4">
-                                <table class="table align-middle mb-0 table-hover" id="Transaction-History">
+                                <table id="example2" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Payment Name</th>
-                                        <th>Date & Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
+                                        <th>id</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Total Pesanan</th>
+                                        <th>Total Pendapatan</th>
+                                        <th>Tipe Rekap</th>
+                                        <th>DIbuat Pada</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-1.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Michle Jhon</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8547846</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 10, 2021</td>
-                                        <td>+256.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-2.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Pauline Bird</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9653248</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 12, 2021</td>
-                                        <td>+566.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-3.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Ralph Alva</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7689524</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 14, 2021</td>
-                                        <td>+636.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-4.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from John Roman</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8335884</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 15, 2021</td>
-                                        <td>+246.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-7.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7865986</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 16, 2021</td>
-                                        <td>+876.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-8.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-9.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from James Caviness</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3775420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-10.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Peter Costanzo</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3768920</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 19, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-11.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Johnny Seitz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9673520</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 20, 2021</td>
-                                        <td>+86.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-12.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-13.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 22, 2021</td>
-                                        <td>+854.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-14.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Thomas Wheeler</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #4278620</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
+                                    
+                                    <?php foreach ($dailyRecaps as $dailyRecap) { ?>
+                                    
+                                        <tr>
+                                            <td>#<?= $dailyRecap['id'] ?></td>
+                                            <td><?= $dailyRecap['first_name'] . ' ' . $dailyRecap['last_name']  ?></td>
+                                            <td><?= $dailyRecap['order_total'] ?></td>
+                                            <td>Rp. <?= number_format($dailyRecap['revenue']) ?></td>
+                                            <td><?= $dailyRecap['recap_type'] ?></td>
+                                            <td><?= date('d-m-Y', strtotime($dailyRecap['created_at'])) ?></td>
+                                        </tr>
+
+                                    <?php } ?>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -809,232 +342,32 @@
                                 <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
                             <div class="table-responsive mt-4">
-                                <table class="table align-middle mb-0 table-hover" id="Transaction-History">
+                                <table id="example3" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Payment Name</th>
-                                        <th>Date & Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
+                                        <th>id</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Total Pesanan</th>
+                                        <th>Total Pendapatan</th>
+                                        <th>Tipe Rekap</th>
+                                        <th>DIbuat Pada</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-1.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Michle Jhon</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8547846</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 10, 2021</td>
-                                        <td>+256.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-2.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Pauline Bird</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9653248</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 12, 2021</td>
-                                        <td>+566.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-3.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Ralph Alva</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7689524</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 14, 2021</td>
-                                        <td>+636.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-4.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from John Roman</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8335884</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 15, 2021</td>
-                                        <td>+246.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-7.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7865986</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 16, 2021</td>
-                                        <td>+876.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-8.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-9.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from James Caviness</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3775420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-10.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Peter Costanzo</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3768920</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 19, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-11.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Johnny Seitz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9673520</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 20, 2021</td>
-                                        <td>+86.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-12.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-13.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 22, 2021</td>
-                                        <td>+854.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-14.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Thomas Wheeler</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #4278620</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
+
+                                    <?php foreach ($weeklyRecaps as $weeklyRecap) { ?>
+
+                                        <tr>
+                                            <td>#<?= $weeklyRecap['id'] ?></td>
+                                            <td><?= $weeklyRecap['first_name'] . ' ' . $weeklyRecap['last_name']  ?></td>
+                                            <td><?= $weeklyRecap['order_total'] ?></td>
+                                            <td>Rp. <?= number_format($weeklyRecap['revenue']) ?></td>
+                                            <td><?= $weeklyRecap['recap_type'] ?></td>
+                                            <td><?= date('d-m-Y', strtotime($weeklyRecap['created_at'])) ?></td>
+                                        </tr>
+
+                                    <?php } ?>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1055,232 +388,32 @@
                                 <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
                             <div class="table-responsive mt-4">
-                                <table class="table align-middle mb-0 table-hover" id="Transaction-History">
+                                <table id="example4" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Payment Name</th>
-                                        <th>Date & Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
+                                        <th>id</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Total Pesanan</th>
+                                        <th>Total Pendapatan</th>
+                                        <th>Tipe Rekap</th>
+                                        <th>DIbuat Pada</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-1.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Michle Jhon</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8547846</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 10, 2021</td>
-                                        <td>+256.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-2.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Pauline Bird</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9653248</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 12, 2021</td>
-                                        <td>+566.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-3.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Ralph Alva</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7689524</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 14, 2021</td>
-                                        <td>+636.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-4.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from John Roman</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8335884</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 15, 2021</td>
-                                        <td>+246.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-7.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7865986</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 16, 2021</td>
-                                        <td>+876.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-8.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-9.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from James Caviness</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3775420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-10.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Peter Costanzo</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3768920</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 19, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-11.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Johnny Seitz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9673520</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 20, 2021</td>
-                                        <td>+86.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-12.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-13.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 22, 2021</td>
-                                        <td>+854.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-14.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Thomas Wheeler</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #4278620</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
+
+                                    <?php foreach ($monthlyRecaps as $monthlyRecap) { ?>
+
+                                        <tr>
+                                            <td>#<?= $monthlyRecap['id'] ?></td>
+                                            <td><?= $monthlyRecap['first_name'] . ' ' . $monthlyRecap['last_name']  ?></td>
+                                            <td><?= $monthlyRecap['order_total'] ?></td>
+                                            <td>Rp. <?= number_format($monthlyRecap['revenue']) ?></td>
+                                            <td><?= $monthlyRecap['recap_type'] ?></td>
+                                            <td><?= date('d-m-Y', strtotime($monthlyRecap['created_at'])) ?></td>
+                                        </tr>
+
+                                    <?php } ?>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -1301,232 +434,32 @@
                                 <div class="font-22 ms-auto"><i class="bx bx-dots-horizontal-rounded"></i></div>
                             </div>
                             <div class="table-responsive mt-4">
-                                <table class="table align-middle mb-0 table-hover" id="Transaction-History">
+                                <table id="example5" class="table table-striped table-bordered" style="width:100%">
                                     <thead class="table-light">
                                     <tr>
-                                        <th>Payment Name</th>
-                                        <th>Date & Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
+                                        <th>id</th>
+                                        <th>Nama Kasir</th>
+                                        <th>Total Pesanan</th>
+                                        <th>Total Pendapatan</th>
+                                        <th>Tipe Rekap</th>
+                                        <th>DIbuat Pada</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-1.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Michle Jhon</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8547846</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 10, 2021</td>
-                                        <td>+256.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-2.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Pauline Bird</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9653248</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 12, 2021</td>
-                                        <td>+566.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-3.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Ralph Alva</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7689524</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 14, 2021</td>
-                                        <td>+636.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-4.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from John Roman</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8335884</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 15, 2021</td>
-                                        <td>+246.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-7.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #7865986</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 16, 2021</td>
-                                        <td>+876.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-8.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-9.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from James Caviness</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3775420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-10.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Peter Costanzo</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #3768920</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 19, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-11.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Johnny Seitz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #9673520</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 20, 2021</td>
-                                        <td>+86.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-danger w-100">Declined</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-12.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Lewis Cruz</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-13.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from David Buckley</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #8576420</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 22, 2021</td>
-                                        <td>+854.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-info text-dark w-100">In Progress</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="">
-                                                    <img src="assets/images/avatars/avatar-14.png" class="rounded-circle" width="46" height="46" alt="" />
-                                                </div>
-                                                <div class="ms-2">
-                                                    <h6 class="mb-1 font-14">Payment from Thomas Wheeler</h6>
-                                                    <p class="mb-0 font-13 text-secondary">Refrence Id #4278620</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>Jan 18, 2021</td>
-                                        <td>+536.00</td>
-                                        <td>
-                                            <div class="badge rounded-pill bg-success w-100">Completed</div>
-                                        </td>
-                                    </tr>
+
+                                    <?php foreach ($yearlyRecaps as $yearlyRecap) { ?>
+
+                                        <tr>
+                                            <td>#<?= $yearlyRecap['id'] ?></td>
+                                            <td><?= $yearlyRecap['first_name'] . ' ' . $yearlyRecap['last_name']  ?></td>
+                                            <td><?= $yearlyRecap['order_total'] ?></td>
+                                            <td>Rp. <?= number_format($yearlyRecap['revenue']) ?></td>
+                                            <td><?= $yearlyRecap['recap_type'] ?></td>
+                                            <td><?= date('d-m-Y', strtotime($yearlyRecap['created_at'])) ?></td>
+                                        </tr>
+
+                                    <?php } ?>
+
                                     </tbody>
                                 </table>
                             </div>

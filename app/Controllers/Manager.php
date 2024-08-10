@@ -2,34 +2,91 @@
 
 require __DIR__ . "/../Helpers/view.php";
 require __DIR__ . "/../Helpers/role.php";
+require __DIR__ . '/../Helpers/badge.php';
+require __DIR__ . '/../Models/Table.php';
+require __DIR__ . '/../Models/Reservation.php';
+require __DIR__ . '/../Models/Menu.php';
+require __DIR__ . '/../Models/Order.php';
+require __DIR__ . '/../Models/OrderDetail.php';
 require __DIR__ . "/../Models/User.php";
+require __DIR__ . "/../Models/Recap.php";
+require __DIR__ . "/../Models/Category.php";
 require __DIR__ . "/../Request/userRequest.php";
 
 function home(): void
 {
     view("Manager/index", [
-        "title" => "Admin Page"
+        "title" => "Admin Page",
+        "topMenus" => getTopMenus(),
+        "monthOrderTrends" => getMonthOrderTrends(),
+        "dayOrderTrends" => getDayOrderTrends(),
+        "weekOrderTrends" => getWeekOrderTrends(),
+        "yearOrderTrends" => getYearOrderTrends(),
+        "dailyRevenue" => getDayOrderSumTrends(),
+        "weeklyRevenue" => getWeekOrderSumTrends(),
+        "monthlyRevenue" => getMonthOrderSumTrends(),
+        "yearlyRevenue" => getYearOrderSumTrends(),
+        "activeOrders" => getActiveOrders(),
+        "dangerStocks" => getMenuStockInDanger(),
+        "menus" => getAllMenu(),
+        "menuCategories" => findAllCategory(),
+        "users" => findAll(),
+        "allTodayOrders" => getTodayOrders(),
     ]);
 }
 
 function orderInfo(): void
 {
     view("Manager/pages/orderInfo", [
-        "title" => "Info Pesanan"
+        "title" => "Info Pesanan",
+        "todayOrdersIn" => getOrdersInToday(),
+        "todayProcessingOrders" => getTodayOrdersProcessingByChef(),
+        "todayDoneOrders" => getTodayOrdersDone(),
+        "allTodayOrders" => getTodayOrders(),
+        "newOrderTrends" => getOrderTrends(),
+        "dayOrderTrends" => getDayOrderTrends(),
+
     ]);
 }
 
 function menuInfo(): void
 {
+    $searchQuery = $_GET['search'] ?? "";
+
+    if ($searchQuery) {
+        $result = searchMenu($searchQuery);
+
+        if (empty($result)) {
+            flash('error', "Ooopss, yang kamu cari tidak ada");
+        }
+    } else {
+        $result = getAllMenu();
+    }
+
     view("Manager/pages/menuInfo", [
-        "title" => "Info Menu"
+        "title" => "Info Menu",
+        "menus" => $result,
+        "dangerStocks" => getMenuStockInDanger(),
+        "outOfStocks" => getOutOfStock(),
+        "safeStocks"=> getSafeStock(),
+        "searchResults" => $result ?? null
     ]);
 }
 
 function transactionInfo(): void
 {
     view("Manager/pages/transactionInfo", [
-        "title" => "Info Transaksi"
+        "title" => "Info Transaksi",
+        "dailyRecaps" => getRecap('day'),
+        "weeklyRecaps" => getRecap('week'),
+        "monthlyRecaps" => getRecap('month'),
+        "yearlyRecaps" => getRecap('year'),
+        "dailyRevenue" => getDayOrderSumTrends(),
+        "weeklyRevenue" => getWeekOrderSumTrends(),
+        "monthlyRevenue" => getMonthOrderSumTrends(),
+        "yearlyRevenue" => getYearOrderSumTrends(),
+        "totalIncome" => getTotalIncome(),
+        "averageOrdersPerDay" => getAverageOrdersPerDay()
     ]);
 }
 

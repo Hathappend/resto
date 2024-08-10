@@ -27,13 +27,13 @@
 <script src="/assets/js/dashboard-human-resources.js"></script>
 <script src="assets/js/dashboard-analytics.js"></script>
 <script>
-		$(document).ready(function() {
-			$('#example').DataTable({
-			    ordering:  false
-			});
+    $(document).ready(function() {
+        $('#example, #example2, #example3, #example4, #example5').DataTable({
+            ordering:  false
+        });
 
-		  } );
-</script>>
+      } );
+</script>
 <script>
 		$('.datepicker').pickadate({
 			selectMonths: false,

@@ -12,6 +12,37 @@
     <!--start page wrapper -->
     <div class="page-wrapper">
         <div class="page-content">
+
+            <?php if (getFlash('error')){ ?>
+                <div class="alert alert-danger border-0 bg-danger alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-message-square-x'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Danger</h6>
+                            <div class="text-white"><?=getFlash('error'); ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('error'); ?>
+            <?php } ?>
+
+            <?php if (getFlash('success')){ ?>
+                <div class="alert alert-success border-0 bg-success alert-dismissible fade show py-2">
+                    <div class="d-flex align-items-center">
+                        <div class="font-35 text-white"><i class='bx bxs-check-circle'></i>
+                        </div>
+                        <div class="ms-3">
+                            <h6 class="mb-0 text-white">Success</h6>
+                            <div class="text-white"><?= getFlash('success') ?></div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <?php clearFlash('success'); ?>
+            <?php } ?>
+
             <div class="row" >
                 <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
                     <div class="row">
@@ -240,8 +271,8 @@
                                             <div class="d-flex align-items-center">
                                                 <div>
                                                     <p class="mb-0 text-secondary">Pesanan Baru</p>
-                                                    <h4 class="my-1">$4805</h4>
-                                                    <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>$34 Since last week</p>
+                                                    <h4 class="my-1"><?= $newOrderTrends['new_order'] ?></h4>
+                                                    <p class="mb-0 font-13 <?= showClassTrends($newOrderTrends['trend'])['text'] ?>"><i class='bx <?= showClassTrends($newOrderTrends['trend'])['icon'] ?> align-middle'></i><?= $newOrderTrends['percentage']?>% dari 15-30 mnt terakhir</p>
                                                 </div>
                                                 <div class="widgets-icons bg-light-success text-success ms-auto"><i class='bx bxs-wallet'></i>
                                                 </div>
@@ -249,19 +280,35 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col">
                                     <div class="card radius-10">
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div>
-                                                    <p class="mb-0 text-secondary">Belum dikonfirmasi</p>
-                                                    <h4 class="my-1">8.4K</h4>
-                                                    <p class="mb-0 font-13 text-success"><i class='bx bxs-up-arrow align-middle'></i>14% Since last week</p>
+                                                    <p class="mb-0 text-secondary">Total Pesanan Hari Ini</p>
+                                                    <h4 class="my-1"><?= $dayOrderTrends['new_order'] ?></h4>
+                                                    <p class="mb-0 font-13 <?= showClassTrends($dayOrderTrends['trend'])['text'] ?>>"><i class='bx <?= showClassTrends($dayOrderTrends['trend'])['icon'] ?> align-middle'></i><?= $dayOrderTrends['percentage']?>% 1 hari terakhir</p>
                                                 </div>
                                                 <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-group'></i>
                                                 </div>
                                             </div>
-                                            <div id="chart2"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="card radius-10">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center">
+                                                <div>
+                                                    <p class="mb-0 text-secondary">Total Pesanan Minggu Ini</p>
+                                                    <h4 class="my-1"><?= $weekOrderTrends['new_order'] ?></h4>
+                                                    <p class="mb-0 font-13 <?= showClassTrends( $weekOrderTrends['trend'])['text'] ?>>"><i class='bx <?= showClassTrends( $weekOrderTrends['trend'])['icon'] ?> align-middle'></i><?=  $weekOrderTrends['percentage']?>% 1 Minggu terakhir</p>
+                                                </div>
+                                                <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-group'></i>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -272,66 +319,13 @@
                                         <div class="card-body">
                                             <div class="d-flex align-items-center">
                                                 <div>
-                                                    <p class="mb-0 text-secondary">Belum dibayar</p>
-                                                    <h4 class="my-1">59K</h4>
-                                                    <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
+                                                    <p class="mb-0 text-secondary">Total Pesanan Bulan Ini</p>
+                                                    <h4 class="my-1"><?= $monthOrderTrends['new_order'] ?></h4>
+                                                    <p class="mb-0 font-13 <?= showClassTrends($monthOrderTrends['trend'])['text'] ?>>"><i class='bx <?= showClassTrends($monthOrderTrends['trend'])['icon'] ?> align-middle'></i><?= $monthOrderTrends['percentage']?>% 1 Bulan terakhir</p>
                                                 </div>
-                                                <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
-                                                </div>
-                                            </div>
-                                            <div id="chart3"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="card radius-10">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <p class="mb-0 text-secondary">Total Pesanan Hari ini</p>
-                                                    <h4 class="my-1">59K</h4>
-                                                    <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
-                                                </div>
-                                                <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
+                                                <div class="widgets-icons bg-light-warning text-warning ms-auto"><i class='bx bxs-group'></i>
                                                 </div>
                                             </div>
-                                            <div id="chart3"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="card radius-10">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <p class="mb-0 text-secondary">Total Pesanan Minggu ini</p>
-                                                    <h4 class="my-1">59K</h4>
-                                                    <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
-                                                </div>
-                                                <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
-                                                </div>
-                                            </div>
-                                            <div id="chart3"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="card radius-10">
-                                        <div class="card-body">
-                                            <div class="d-flex align-items-center">
-                                                <div>
-                                                    <p class="mb-0 text-secondary">Total Pesanan Bulan ini</p>
-                                                    <h4 class="my-1">59K</h4>
-                                                    <p class="mb-0 font-13 text-danger"><i class='bx bxs-down-arrow align-middle'></i>12.4% Since last week</p>
-                                                </div>
-                                                <div class="widgets-icons bg-light-danger text-danger ms-auto"><i class='bx bxs-binoculars'></i>
-                                                </div>
-                                            </div>
-                                            <div id="chart3"></div>
                                         </div>
                                     </div>
                                 </div>

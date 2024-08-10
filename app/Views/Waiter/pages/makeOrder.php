@@ -27,18 +27,6 @@
                             </ol>
                         </nav>
                     </div>
-                    <div class="ms-auto">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary">Settings</button>
-                            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
-                                <a class="dropdown-item" href="javascript:;">Another action</a>
-                                <a class="dropdown-item" href="javascript:;">Something else here</a>
-                                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!--end breadcrumb-->
 
@@ -47,19 +35,18 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row align-items-center">
-                                    <div class="col-lg-3 col-xl-2">
-                                        <a href="ecommerce-add-new-products.html" class="btn btn-primary mb-3 mb-lg-0"><i class='bx bxs-plus-square'></i>New Product</a>
-                                    </div>
-                                    <div class="col-lg-9 col-xl-10">
-                                        <form class="float-lg-end">
-                                            <div class="row row-cols-lg-auto g-2">
-                                                <div class="col-12">
-                                                    <div class="position-relative">
-                                                        <input type="text" class="form-control ps-5" placeholder="Search Product..."> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+                                    <div class="col-12">
+                                        <form class="">
+                                            <div class="row d-flex justify-content-between">
+                                                <div class="col-12 col-sm-12 col-md-12 col-lg-5 my-1">
+                                                    <div class="position-relative my-1">
+                                                        <form action="/buat-pesanan" method="GET">
+                                                            <input type="text" name="search" class="form-control ps-5" placeholder="Search Product..."> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+                                                        </form>
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                                <div class="col-12 col-sm-12 col-md-12 my-1 col-lg-6 d-flex justify-content-center flex-wrap" >
+                                                    <div class="btn-group my-1" role="group" aria-label="Button group with nested dropdown">
                                                         <button type="button" class="btn btn-white">Sort By</button>
                                                         <div class="btn-group" role="group">
                                                             <button id="btnGroupDrop1" type="button" class="btn btn-white dropdown-toggle dropdown-toggle-nocaret px-1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -71,9 +58,7 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                                    <div class="btn-group my-1 mx-3" role="group" aria-label="Button group with nested dropdown">
                                                         <button type="button" class="btn btn-white">Collection Type</button>
                                                         <div class="btn-group" role="group">
                                                             <button id="btnGroupDrop1" type="button" class="btn btn-white dropdown-toggle dropdown-toggle-nocaret px-1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -85,9 +70,7 @@
                                                             </ul>
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="btn-group" role="group">
+                                                    <div class="btn-group my-1" role="group">
                                                         <button type="button" class="btn btn-white">Price Range</button>
                                                         <div class="btn-group" role="group">
                                                             <button id="btnGroupDrop1" type="button" class="btn btn-white dropdown-toggle dropdown-toggle-nocaret px-1" data-bs-toggle="dropdown" aria-expanded="false">
@@ -304,6 +287,15 @@
 
                             </div>
                     </div>
+                    <?php if (getFlash('errorSearch')){ ?>
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-5 p-3">
+                                <img src="/assets/images/search-not-found.png" class="img-fluid bg-transparent" alt="" style="mix-blend-mode: multiply;opacity: 0.5;">
+                                <h5 class="text-center"><?= getFlash('errorSearch') ?></h5>
+                            </div>
+                        </div>
+                        <?php clearFlash('errorSearch'); ?>
+                    <?php } ?>
                 </div><!--end row-->
             </div>
         </div>

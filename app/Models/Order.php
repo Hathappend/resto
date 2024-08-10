@@ -124,7 +124,8 @@ function getOrderById(string $id): array{
         o.sub_total, 
         o.total, 
         o.note,
-        o.created_at
+        o.created_at,
+        o.cashier_id
     FROM orders as o 
     JOIN reservations as r ON r.id = o.reservation_id                                                                         
     WHERE o.id =? ");
@@ -430,7 +431,6 @@ function getReservationTrends(): array {
     ];
 }
 
-// Fungsi untuk mendapatkan tren pesanan dalam interval 1 bulan
 function getMonthOrderTrends(): array {
     $conn = getConnection();
 
@@ -445,6 +445,57 @@ function getMonthOrderTrends(): array {
         'new_order' => $currentCount
     ];
 }
+
+function getWeekOrderTrends(): array {
+    $conn = getConnection();
+
+    $currentWeekStart = date('Y-m-d', strtotime('monday this week'));
+    $currentWeekEnd = date('Y-m-d', strtotime('sunday this week +1 day'));
+
+    $previousWeekStart = date('Y-m-d', strtotime('monday last week'));
+    $previousWeekEnd = date('Y-m-d', strtotime('sunday last week +1 day'));
+
+    $currentCount = getCount($conn, $currentWeekStart, $currentWeekEnd, "orders");
+    $previousCount = getCount($conn, $previousWeekStart, $previousWeekEnd, "orders");
+
+    // Calculate the percentage change
+    $change = calculatePercentageChange($currentCount, $previousCount);
+
+    // Return the trend data
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'new_order' => $currentCount
+    ];
+}
+
+function getYearOrderTrends(): array {
+    $conn = getConnection();
+
+    // Get the start and end dates of the current year
+    $currentYearStart = date('Y-01-01');
+    $currentYearEnd = date('Y-01-01', strtotime('+1 year'));
+
+    // Get the start and end dates of the previous year
+    $previousYearStart = date('Y-01-01', strtotime('-1 year'));
+    $previousYearEnd = date('Y-01-01');
+
+    // Get the counts of orders for the current and previous years
+    $currentCount = getCount($conn, $currentYearStart, $currentYearEnd, "orders");
+    $previousCount = getCount($conn, $previousYearStart, $previousYearEnd, "orders");
+
+    // Calculate the percentage change
+    $change = calculatePercentageChange($currentCount, $previousCount);
+
+    // Return the trend data
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'new_order' => $currentCount
+    ];
+}
+
+
 
 function getDayOrderTrends(): array {
     $conn = getConnection();
@@ -500,5 +551,237 @@ function getDailyPaxTrends(): ?array {
         'new_pax' => $currentPax
     ];
 }
+
+function filterOrdersByDate($filterType, $filterValue): array {
+    $query = "
+        SELECT 
+            o.id, 
+            o.reservation_id, 
+            o.status, 
+            o.queue_number, 
+            o.sub_total, 
+            o.total, 
+            o.note, 
+            o.created_at, 
+            o.cashier_id,
+            r.table_number
+        FROM orders AS o 
+        JOIN reservations AS r ON o.reservation_id = r.id
+    ";
+
+    // Append the WHERE clause based on the filter type
+    switch ($filterType) {
+        case 'day':
+            $query .= "WHERE DATE(o.created_at) = ? ";
+            break;
+        case 'week':
+            list($year, $week) = explode('-W', $filterValue);
+            $query .= "WHERE YEAR(o.created_at) = ? AND WEEK(o.created_at, 1) = ? ";
+            break;
+        case 'month':
+            list($year, $month) = explode('-', $filterValue);
+            $query .= "WHERE YEAR(o.created_at) = ? AND MONTH(o.created_at) = ? ";
+            break;
+        case 'year':
+            $query .= "WHERE YEAR(o.created_at) = ? ";
+            break;
+        default:
+            throw new Exception("Rekap tipe tidak valid.");
+    }
+
+    $query .= "
+        ORDER BY o.created_at ASC;
+    ";
+
+    $stmt = getConnection()->prepare($query);
+    if ($filterType == 'week' || $filterType == 'month') {
+        $stmt->execute([$year, $week ?? $month]);
+    } else {
+        $stmt->execute([$filterValue]);
+    }
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getOrdersByDateRange(?string $startDate, ?string $endDate): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) BETWEEN ? AND ?
+    ORDER BY o.created_at DESC;
+    ");
+    $stmt->execute([$startDate, $endDate]);
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getSum($conn, $startTime, $endTime, $table_name): float {
+    $stmt = $conn->prepare("SELECT SUM(total) AS data_sum FROM $table_name WHERE created_at >= ? AND created_at < ?");
+    $stmt->execute([$startTime, $endTime]);
+    return (float) $stmt->fetch(PDO::FETCH_ASSOC)['data_sum'];
+}
+
+function getDayOrderSumTrends(): array {
+    $conn = getConnection();
+
+    $currentSum = getSum($conn, date('Y-m-d'), date('Y-m-d', strtotime('+1 day')), "orders");
+    $previousSum = getSum($conn, date('Y-m-d', strtotime('-1 day')), date('Y-m-d'), "orders");
+
+    $change = calculatePercentageChange($currentSum, $previousSum);
+
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'total_sum' => $currentSum
+    ];
+}
+
+function getWeekOrderSumTrends(): array {
+    $conn = getConnection();
+
+    $currentWeekStart = date('Y-m-d', strtotime('monday this week'));
+    $currentWeekEnd = date('Y-m-d', strtotime('sunday this week +1 day'));
+
+    $previousWeekStart = date('Y-m-d', strtotime('monday last week'));
+    $previousWeekEnd = date('Y-m-d', strtotime('sunday last week +1 day'));
+
+    $currentSum = getSum($conn, $currentWeekStart, $currentWeekEnd, "orders");
+    $previousSum = getSum($conn, $previousWeekStart, $previousWeekEnd, "orders");
+
+    $change = calculatePercentageChange($currentSum, $previousSum);
+
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'total_sum' => $currentSum
+    ];
+}
+
+function getMonthOrderSumTrends(): array {
+    $conn = getConnection();
+
+    $currentMonthStart = date('Y-m-01');
+    $currentMonthEnd = date('Y-m-01', strtotime('+1 month'));
+
+    $previousMonthStart = date('Y-m-01', strtotime('-1 month'));
+    $previousMonthEnd = date('Y-m-01');
+
+    $currentSum = getSum($conn, $currentMonthStart, $currentMonthEnd, "orders");
+    $previousSum = getSum($conn, $previousMonthStart, $previousMonthEnd, "orders");
+
+    $change = calculatePercentageChange($currentSum, $previousSum);
+
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'total_sum' => $currentSum
+    ];
+}
+
+function getYearOrderSumTrends(): array {
+    $conn = getConnection();
+
+    $currentYearStart = date('Y-01-01');
+    $currentYearEnd = date('Y-01-01', strtotime('+1 year'));
+
+    $previousYearStart = date('Y-01-01', strtotime('-1 year'));
+    $previousYearEnd = date('Y-01-01');
+
+    $currentSum = getSum($conn, $currentYearStart, $currentYearEnd, "orders");
+    $previousSum = getSum($conn, $previousYearStart, $previousYearEnd, "orders");
+
+    $change = calculatePercentageChange($currentSum, $previousSum);
+
+    return [
+        'percentage' => round($change['percentage']),
+        'trend' => $change['trend'],
+        'total_sum' => $currentSum
+    ];
+}
+
+function getActiveOrders(): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) = CURDATE() AND o.status != 'selesai'
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getOrdersInToday(): array {
+    $stmt = getConnection()->prepare("
+    SELECT 
+        o.id, 
+        o.reservation_id, 
+        o.status, 
+        o.queue_number, 
+        o.sub_total, 
+        o.total, 
+        o.note, 
+        o.created_at, 
+        r.table_number 
+    FROM orders AS o 
+    JOIN reservations AS r ON o.reservation_id = r.id
+    WHERE DATE(o.created_at) = CURDATE() 
+    AND o.status NOT IN ('dimasak', 'selesai')
+    ORDER BY 
+        o.status = 'belum dibayar' DESC,
+        o.queue_number ASC,
+        o.created_at DESC;
+    ");
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getTotalIncome(): float {
+    $stmt = getConnection()->prepare("SELECT SUM(total) AS data_sum FROM orders");
+    $stmt->execute();
+    return (float) $stmt->fetch(PDO::FETCH_ASSOC)['data_sum'];
+}
+
+function getAverageOrdersPerDay(): float {
+    $conn = getConnection();
+
+    $stmt = $conn->prepare("SELECT COUNT(*) AS total_orders FROM orders");
+    $stmt->execute();
+    $totalOrders = (int) $stmt->fetch(PDO::FETCH_ASSOC)['total_orders'];
+
+    $stmt = $conn->prepare("SELECT COUNT(DISTINCT DATE(created_at)) AS total_days FROM orders");
+    $stmt->execute();
+    $totalDays = (int) $stmt->fetch(PDO::FETCH_ASSOC)['total_days'];
+
+    if ($totalDays === 0) {
+        return 0.0;
+    }
+
+    return $totalOrders / $totalDays;
+}
+
+
+
+
 
 

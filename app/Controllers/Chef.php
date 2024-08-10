@@ -66,9 +66,21 @@ function confirmOrderReady(string $id){
 
 function menu(): void{
 
+    $searchQuery = $_GET['search'] ?? "";
+
+    if ($searchQuery) {
+        $result = searchMenu($searchQuery);
+
+        if (empty($result)) {
+            flash('errorSearch', "Ooopss, yang kamu cari tidak ada");
+        }
+    } else {
+        $result = getAllMenu();
+    }
+
     view("Chef/pages/menu", [
         "title" => "Daftar Menu",
-        "menus" => getAllMenu(),
+        "menus" => $result ?? null,
         "dangerStocks" => getMenuStockInDanger(),
         "outOfStocks" => getOutOfStock(),
         "safeStocks"=> getSafeStock()

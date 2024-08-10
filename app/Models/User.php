@@ -35,7 +35,7 @@ function save(array $request): bool{
     }
 }
 
-function findById(string $id): array{
+function findById(?string $id): array{
     $stmt = getConnection()->prepare("SELECT first_name, last_name, email, address, address2, city, province, zip, profile_img, created_at, roles_mask, last_login FROM users WHERE id = ?");
     $stmt->execute([$id]);
     

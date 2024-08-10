@@ -2,7 +2,7 @@
 
 function checkAccessRole(): void {
     $auth = getAuth();
-    $currentRoute = $_SERVER['REQUEST_URI'];
+    $currentRoute = strtok($_SERVER['REQUEST_URI'], '?'); // Menghapus query string dari URL
     $rolePermissions = include __DIR__ . '/../Config/RolePermissions.php';
 
     // Jika rute adalah publik, izinkan akses

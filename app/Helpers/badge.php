@@ -16,6 +16,10 @@ function showColorClassBadge(string $status, string $useFor): string{
             return "bg-secondary";
         }
 
+        if ($status == "selesai") {
+            return "bg-success";
+        }
+
     }
 
     return "";

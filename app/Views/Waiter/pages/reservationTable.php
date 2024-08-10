@@ -39,9 +39,6 @@
                                 <li><a class="dropdown-item" href="#">Something else here</a></li>
                             </ul>
                         </div>
-                        <button type="button" class="btn btn-primary mb-3 mb-lg-0" data-bs-toggle="modal" data-bs-target="#addReservation">
-                            <i class='bx bxs-plus-square'></i>Reservasi
-                        </button>
 
                     </div>
                     <!--end breadcrumb-->

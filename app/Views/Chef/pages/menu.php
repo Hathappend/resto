@@ -26,18 +26,6 @@
                             </ol>
                         </nav>
                     </div>
-                    <div class="ms-auto">
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary">Settings</button>
-                            <button type="button" class="btn btn-primary split-bg-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown">	<span class="visually-hidden">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu dropdown-menu-right dropdown-menu-lg-end">	<a class="dropdown-item" href="javascript:;">Action</a>
-                                <a class="dropdown-item" href="javascript:;">Another action</a>
-                                <a class="dropdown-item" href="javascript:;">Something else here</a>
-                                <div class="dropdown-divider"></div>	<a class="dropdown-item" href="javascript:;">Separated link</a>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <!--end breadcrumb-->
 
@@ -99,9 +87,9 @@
                                         <form class="float-lg-end">
                                             <div class="row row-cols-lg-auto g-2">
                                                 <div class="col-12">
-                                                    <div class="position-relative">
-                                                        <input type="text" class="form-control ps-5" placeholder="Search Product..."> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
-                                                    </div>
+                                                    <form action="/menu" method="GET">
+                                                        <input type="text" name="search" class="form-control ps-5" placeholder="Search Product..."> <span class="position-absolute top-50 product-show translate-middle-y"><i class="bx bx-search"></i></span>
+                                                    </form>
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -315,6 +303,16 @@
                                     </div>
                                 </div>
 
+                            <?php } ?>
+
+                            <?php if (getFlash('errorSearch')){ ?>
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-5 p-3">
+                                        <img src="/assets/images/search-not-found.png" class="img-fluid bg-transparent" alt="" style="mix-blend-mode: multiply;opacity: 0.5;">
+                                        <h5 class="text-center"><?= getFlash('errorSearch') ?></h5>
+                                    </div>
+                                </div>
+                                <?php clearFlash('errorSearch'); ?>
                             <?php } ?>
 
                         </div>
